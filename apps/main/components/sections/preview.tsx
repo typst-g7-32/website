@@ -20,9 +20,14 @@ export function PreviewSection() {
         }
         const text = await response.text()
         setTypstCode(text)
-      } catch (e: any) {
-        setError(`Failed to load Typst code: ${e.message}`)
-        console.error("Error fetching Typst code:", e)
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          setError(`Failed to load Typst code: ${e.message}`)
+          console.error("Error fetching Typst code:", e)
+        } else {
+          setError("Failed to load Typst code")
+          console.error("Error fetching Typst code:", e)
+        }
       } finally {
         setLoading(false)
       }
@@ -55,7 +60,7 @@ export function PreviewSection() {
               </div>
               <div className="w-full md:w-1/2">
                 <div className="h-[53rem]">
-                  <PdfViewer pdfUrl="./example.pdf"/>
+                  <PdfViewer pdfUrl="./example.pdf" />
                 </div>
               </div>
             </div>

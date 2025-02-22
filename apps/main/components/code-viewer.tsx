@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Copy } from 'lucide-react';
 import Prism from 'prismjs';
 import { useToast } from "@/hooks/use-toast"

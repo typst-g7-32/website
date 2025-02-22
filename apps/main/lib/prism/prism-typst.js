@@ -176,7 +176,7 @@ Prism.languages["typst-code"].typst = {
   pattern: /\[(?:[^\]\[]|\[(?:[^\]\[]|\[(?:[^\]\[]|\[[^\]\[]*\])*\])*\])*\]/,
   inside: Prism.languages["typst"],
   greedy: true
-},
+};
 
 Prism.languages.typ = Prism.languages.typst;
 Prism.languages.typc = Prism.languages["typst-code"];
