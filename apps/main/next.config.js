@@ -5,7 +5,7 @@ module.exports = {
                 protocol: 'https',
                 hostname: 'github.com',
                 port: '',
-                pathname: '/typst-g7-32/typst-g7-32/raw/preview/**',
+                pathname: '/typst-g7-32/typst-g7-32/**',
                 search: '',
             },
         ],

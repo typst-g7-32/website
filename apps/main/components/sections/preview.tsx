@@ -60,7 +60,7 @@ export function PreviewSection() {
               </div>
               <div className="w-full md:w-1/2">
                 <div className="h-[53rem]">
-                  <PdfViewer pdfUrl="./example.pdf" />
+                  <PdfViewer pdfUrl="https://raw.githubusercontent.com/typst-g7-32/typst-g7-32/refs/heads/preview/main.pdf" />
                 </div>
               </div>
             </div>
