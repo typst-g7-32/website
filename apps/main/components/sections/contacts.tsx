@@ -29,8 +29,8 @@ export default function ContactSection() {
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: "forgenet@inbox.ru",
-      copyValue: "forgenet@inbox.ru",
+      value: "forgenet@typst-gost.ru",
+      copyValue: "forgenet@typst-gost.ru",
     },
     {
       icon: <Phone className="h-5 w-5" />,
