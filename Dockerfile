@@ -1,4 +1,4 @@
-FROM jarredsumner/bun:latest
+FROM oven/bun:latest
 
 WORKDIR /app
 
