@@ -1,10 +1,13 @@
-FROM oven/bun
-WORKDIR /web
+FROM jarredsumner/bun:latest
+
+WORKDIR /app
 
 COPY . .
+
 RUN bun install
-WORKDIR /web/apps/main/
+
 RUN bun run build
 
-CMD ["bun", "start"]
-EXPOSE 8082
+EXPOSE 3000
+
+CMD ["bun", "run", "start"]
