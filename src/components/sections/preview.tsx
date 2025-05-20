@@ -19,7 +19,7 @@ export function PreviewSection() {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const text = await response.text()
-        setTypstCode(text)
+        setTypstCode(text.replace("/src/export.typ", "@preview/modern-g7-32:0.1.0"))
       } catch (e: unknown) {
         if (e instanceof Error) {
           setError(`Failed to load Typst code: ${e.message}`)
