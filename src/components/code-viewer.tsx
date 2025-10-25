@@ -51,7 +51,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ codeType, codeContent }) => {
         </span>
         <button
           onClick={handleCopyClick}
-          className="text-gray-400 hover:text-white focus:outline-none"
+          className="text-gray-400 hover:text-white focus:outline-hidden"
           aria-label="Copy code"
         >
           <Copy className="h-4 w-4" />

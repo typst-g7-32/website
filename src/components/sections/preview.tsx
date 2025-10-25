@@ -40,8 +40,8 @@ export function PreviewSection() {
     <section>
       <div className="container mx-auto">
         <div className="relative mx-auto max-w-7xl mt-16">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg blur-3xl"></div>
-          <div className="relative bg-gray-800/50 border border-gray-800/50 rounded-lg p-4 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 to-purple-500/10 rounded-lg blur-3xl"></div>
+          <div className="relative bg-gray-800/50 border border-gray-800/50 rounded-lg p-4 backdrop-blur-xs">
             <div className="flex flex-col md:flex-row gap-4 items-stretch">
               <div className="w-full md:w-1/2">
                 <div className="h-full">
@@ -52,14 +52,14 @@ export function PreviewSection() {
                   ) : error ? (
                     <div>Error: {error}</div>
                   ) : (
-                    <div className="h-[53rem]">
+                    <div className="h-212">
                       <CodeBlock codeType="typst" codeContent={typstCode || ""} />
                     </div>
                   )}
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="h-[53rem]">
+                <div className="h-212">
                   <PdfViewer pdfUrl="https://raw.githubusercontent.com/typst-g7-32/typst-g7-32/refs/heads/preview/main.pdf" />
                 </div>
               </div>

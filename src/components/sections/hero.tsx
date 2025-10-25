@@ -11,7 +11,7 @@ export function HeroSection() {
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
             Оформляйте документы {""}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-blue-600">
               автоматически
             </span>
           </h1>

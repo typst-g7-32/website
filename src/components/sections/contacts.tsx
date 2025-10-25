@@ -158,7 +158,7 @@ export default function ContactSection() {
         <div className="max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
             Остались вопросы?{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-blue-600">
               Напишите!
             </span>
           </h2>
@@ -283,7 +283,7 @@ export default function ContactSection() {
               <CardContent className="space-y-6">
                 {contactInfo.map((item, index) => (
                   <div key={index} className="flex items-start group">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mr-4 text-blue-400">
+                    <div className="shrink-0 h-10 w-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mr-4 text-blue-400">
                       {item.icon}
                     </div>
                     <div className="flex-1">
@@ -308,7 +308,7 @@ export default function ContactSection() {
                       onClick={() =>
                         copyToClipboard(item.copyValue, item.label)
                       }
-                      className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-900/70 border border-gray-700/20 flex items-center justify-center hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-400 transition-all duration-300"
+                      className="shrink-0 h-8 w-8 rounded-full bg-gray-900/70 border border-gray-700/20 flex items-center justify-center hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-400 transition-all duration-300"
                     >
                       {copied === item.label ? (
                         <Check className="h-4 w-4 text-green-500" />
@@ -336,7 +336,7 @@ export default function ContactSection() {
               <CardContent className="space-y-6">
                 {additionalInfo.map((info, index) => (
                   <div key={index} className="flex items-start">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mr-4 text-blue-400">
+                    <div className="shrink-0 h-10 w-10 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mr-4 text-blue-400">
                       {info.icon}
                     </div>
                     <div className="flex-1">
