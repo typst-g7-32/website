@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Suspense } from "react";
 
 import { YandexMetrika } from "@/components/yandex-metrics";
 
 import "./globals.css";
 import '../components/sections/comparison/styles.css'
+import { defineI18nUI } from 'fumadocs-ui/i18n';
+import { i18n } from '@/lib/i18n';
 
 const siteUrl = "https://typst-gost.ru";
 const siteName = "Typst 7.32";
@@ -39,6 +42,20 @@ export const metadata: Metadata = {
   
   robots: "index, follow",
 };
+
+const { provider } = defineI18nUI(i18n, {
+  translations: {
+    ru: {
+      displayName: 'Русский',
+      search: 'Поиск',
+      searchNoResult: 'Ничего не найдено',
+      toc: 'На этой странице',
+      lastUpdate: 'Последнее обновление',
+      chooseLanguage: 'Выбрать язык',
+      chooseTheme: 'Выбрать тему',
+    },
+  },
+});
 
 export default function RootLayout({
   children,
@@ -79,7 +96,11 @@ export default function RootLayout({
       </head>
       
       <body className="antialiased">
+        <RootProvider
+          i18n={provider("ru")}
+        >
         {children}
+        </RootProvider>
       </body>
 
       <Suspense fallback={<></>}>

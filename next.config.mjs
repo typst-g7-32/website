@@ -1,4 +1,10 @@
-module.exports = {
+import { createMDX } from 'fumadocs-mdx/next';
+
+const withMDX = createMDX({
+});
+
+/** @type {import('next').NextConfig} */
+const config = {
     images: {
         remotePatterns: [
             {
@@ -36,4 +42,7 @@ module.exports = {
         return config;
     },
     serverExternalPackages: ['pdfjs-dist'],
-}
+    reactStrictMode: true,
+};
+
+export default withMDX(config);
