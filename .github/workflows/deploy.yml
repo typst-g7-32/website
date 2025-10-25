@@ -25,7 +25,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: f0rgenet/typst-gost:latest
+          tags: f0rgenet/typst-gost:latest,f0rgenet/typst-gost:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           key: ${{ secrets.VDS_SSH_KEY }}
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker pull f0rgenet/typst-gost:latest
+            docker run --pull always -d --restart always ...
             docker stop typst-gost || true
             docker rm typst-gost || true
             docker run -d --restart always --name typst-gost -p 3000:3000 \
@@ -49,4 +49,4 @@ jobs:
               -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
               -e EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
               -e RECIPIENT_EMAIL=${{ secrets.RECIPIENT_EMAIL }} \
-              f0rgenet/typst-gost:latest
+              f0rgenet/typst-gost:${{ github.sha }}
