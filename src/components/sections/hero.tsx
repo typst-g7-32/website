@@ -4,8 +4,8 @@ export default function HeroSection() {
   return (
     <section className="pt-24 sm:pt-28 md:pt-32 px-4">
       <div className="container mx-auto">
-        <div className="max-w-5xl mx-auto text-center mb-10 md:mb-14">
-          <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs sm:text-sm text-blue-400 mb-5 sm:mb-6">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm text-blue-400 mb-6">
             <span className="flex h-2 w-2 rounded-full bg-blue-400 mr-2"></span>
             ГОСТ 7.32-2017
           </div>
