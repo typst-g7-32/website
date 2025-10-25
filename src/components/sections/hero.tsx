@@ -39,11 +39,9 @@ export default function HeroSection() {
             </Button>
             <Button className="w-full sm:w-auto py-3 px-5 text-sm sm:text-base font-medium text-white rounded-lg bg-gray-700 hover:bg-gray-600 focus:ring-1">
               <a
-                href="https://github.com/typst-g7-32/modern-g7-32"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/docs"
               >
-                Репозиторий
+              Документация
               </a>
             </Button>
           </div>
