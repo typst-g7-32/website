@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Typst 7.32",
@@ -17,7 +18,8 @@ export default function RootLayout({
     <html lang="ru">
       <link rel="icon" href="/favicon.ico" />
       <body className="antialiased">
-        {children}
+        <Navbar />  
+          {children}
         <Toaster />
       </body>
       <GoogleAnalytics gaId="G-CF82SLT7VV" />

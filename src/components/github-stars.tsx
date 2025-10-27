@@ -8,7 +8,7 @@ export function GitHubStars() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/typst-g7-32/typst-g7-32")
+    fetch("https://api.github.com/repos/typst-g7-32/modern-g7-32")
       .then((res) => res.json())
       .then((data) => {
         const starCount = data.stargazers_count
@@ -22,7 +22,7 @@ export function GitHubStars() {
 
   return (
     <a
-      href="https://github.com/typst-g7-32/typst-g7-32"
+      href="https://github.com/typst-g7-32/modern-g7-32"
       className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
       target="_blank"
       rel="noopener noreferrer"

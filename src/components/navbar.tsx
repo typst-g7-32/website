@@ -23,11 +23,11 @@ export function Navbar() {
             </Link>
             <Link
               href="/examples"
-              className="pointer-events-none text-gray-500"
               onClick={closeMenu}
+              className="text-white"
               aria-disabled="true"
             >
-              Примеры (в работе)
+              Примеры
             </Link>
           </div>
         </div>
@@ -84,11 +84,11 @@ export function Navbar() {
             </Link>
             <Link
               href="/examples"
-              className="block rounded px-3 py-2 text-gray-500 pointer-events-none"
+              className="block rounded px-3 py-2 text-white"
               onClick={closeMenu}
               aria-disabled="true"
             >
-              Примеры (в работе)
+              Примеры
             </Link>
 
             <div className="pt-2">

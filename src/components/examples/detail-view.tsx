@@ -1,57 +1,57 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import PdfViewer from '@/components/pdf-viewer';
-import CodeBlock from '@/components/code-viewer';
-import { LoadingSpinner } from '@/components/ui/spinner';
-import { getHomepageExample } from '@/data/examples';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { ExampleItem } from '@/types/example';
+import PdfViewer from '../pdf-viewer';
+import CodeBlock from '../code-viewer';
+import { LoadingSpinner } from '../ui/spinner';
+import { Navbar } from '../navbar';
 
-export default function ExampleSection() {
+interface ExampleDetailViewProps {
+  example: ExampleItem;
+}
+
+export default function ExampleDetailView({ example }: ExampleDetailViewProps) {
   const [typstCode, setTypstCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const homepageExample = getHomepageExample();
-
   useEffect(() => {
-    if (!homepageExample) {
-      setError('Превью для главной страницы не найдено');
-      setLoading(false);
-      return;
-    }
-
     const fetchTypstCode = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(homepageExample.codeUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await fetch(example.codeUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const text = await response.text();
         setTypstCode(text.replace("/src/export.typ", "@example/modern-g7-32:0.1.0"));
       } catch (e: unknown) {
-        if (e instanceof Error) setError(`Failed to load Typst code: ${e.message}`);
-        else setError("Failed to load Typst code");
+        if (e instanceof Error) {
+          setError(`Не удалось загрузить код: ${e.message}`);
+        } else {
+          setError("Не удалось загрузить код");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchTypstCode();
-  }, [homepageExample]);
-
-  if (!homepageExample) {
-    return (
-      <section className="py-16">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-red-400">Превью для главной страницы не настроено</p>
-        </div>
-      </section>
-    );
-  }
+  }, [example.codeUrl]);
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-linear-to-b from-gray-900 to-gray-950">
+      <div className="container pb-4 mx-auto px-4 pt-24 sm:pt-28 md:pt-32">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            {example.title}
+          </h1>
+        </div>
+
         <div className="relative mx-auto max-w-7xl">
           <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 to-purple-500/10 rounded-3xl blur-3xl" />
           <div className="relative bg-gray-800/50 border border-gray-800/50 rounded-3xl p-4 sm:p-6 backdrop-blur-xs">
@@ -62,20 +62,23 @@ export default function ExampleSection() {
                     <LoadingSpinner size={48} />
                   </div>
                 ) : error ? (
-                  <div className="flex h-full items-center justify-center text-red-400">{error}</div>
+                  <div className="flex h-full items-center justify-center text-red-400">
+                    {error}
+                  </div>
                 ) : (
                   <div className="h-full overflow-hidden rounded-xl">
                     <CodeBlock codeType="typst" codeContent={typstCode || ""} />
                   </div>
                 )}
               </div>
+
               <div className="w-full xl:w-1/2 h-[70vh] min-h-[480px] overflow-hidden rounded-xl">
-                <PdfViewer pdfUrl={homepageExample.pdfUrl} />
+                <PdfViewer pdfUrl={example.pdfUrl} />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
