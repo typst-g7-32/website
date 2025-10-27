@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Banner } from 'fumadocs-ui/components/banner';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { defineI18nUI } from 'fumadocs-ui/i18n';
@@ -49,6 +50,8 @@ const { provider } = defineI18nUI(i18n, {
       lastUpdate: 'Последнее обновление',
       chooseLanguage: 'Выбрать язык',
       chooseTheme: 'Выбрать тему',
+      nextPage: "Следующая страница",
+      previousPage: "Предыдущая страница",
     },
   },
 });
