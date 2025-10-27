@@ -1,36 +1,176 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# typst-gost Website
 
-## Getting Started
+Официальный сайт проекта modern-g7-32 - шаблон для оформления документов в соответствии с ГОСТ 7.32-2017.
 
-First, run the development server:
+Проект создан на базе [Next.js](https://nextjs.org) с использованием [Nextra](https://nextra.site/) для генерации документации.
 
+## Быстрый старт
+
+### Установка Bun
+
+Проект использует [Bun](https://bun.sh) как пакетный менеджер и runtime. Установите Bun одним из способов:
+
+#### Linux/macOS
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+curl -fsSL https://bun.sh/install | bash
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Windows (PowerShell)
+```powershell
+irm bun.sh/install.ps1 | iex
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Через npm
+```bash
+npm install -g bun
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Запуск проекта
 
-## Learn More
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/typst-g7-32/website.git
+   cd website
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Установите зависимости:**
+   ```bash
+   bun install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Запустите сервер разработки:**
+   ```bash
+   bun dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Откройте [http://localhost:3000](http://localhost:3000) в браузере
 
-## Deploy on Vercel
+### Доступные команды
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+bun dev          # Запуск сервера разработки
+bun build        # Сборка проекта для продакшена
+bun start        # Запуск production сервера
+bun lint         # Проверка кода линтером
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Структура проекта
+
+```
+.
+├── src/
+│   ├── app/         # Next.js App Router
+│   ├── components/  # React компоненты
+│   └── lib/         # Утилиты и хелперы
+├── public/          # Статические файлы
+├── docs/           # Файлы документации (MDX)
+└── package.json
+```
+
+## Технологии
+
+- **[Next.js](https://nextjs.org)** - React фреймворк для веб-приложений
+- **[Nextra](https://nextra.site/)** - статический генератор сайтов на базе Next.js
+- **[Tailwind CSS](https://tailwindcss.com)** - CSS фреймворк
+- **[TypeScript](https://www.typescriptlang.org)** - типизированный JavaScript
+- **[Bun](https://bun.sh)** - быстрый пакетный менеджер и runtime
+
+## Документация
+
+- **[Next.js документация](https://nextjs.org/docs)** - изучите возможности Next.js
+- **[Nextra документация](https://nextra.site/docs)** - руководство по созданию документации
+- **[Tailwind CSS документация](https://tailwindcss.com/docs)** - справочник по стилизации
+- **[Bun документация](https://bun.sh/docs)** - руководство по использованию Bun
+
+## Правила контрибуции
+
+### Как внести вклад
+
+1. **Форк репозитория** через GitHub интерфейс
+2. **Создайте ветку** для ваших изменений:
+   ```bash
+   git checkout -b feature/описание-изменений
+   ```
+3. **Внесите изменения** и протестируйте их локально
+4. **Зафиксируйте изменения** с понятным сообщением:
+   ```bash
+   git commit -m "feat: добавить новую функциональность"
+   ```
+5. **Отправьте изменения** в ваш форк:
+   ```bash
+   git push origin feature/описание-изменений
+   ```
+6. **Создайте Pull Request** с подробным описанием
+
+### Требования к коду
+
+- **Линтинг:** Код должен проходить проверку ESLint
+  ```bash
+  bun lint
+  ```
+- **Типизация:** Используйте TypeScript для новых файлов
+- **Стилизация:** Следуйте существующим паттернам оформления
+- **Тестирование:** Убедитесь, что проект собирается без ошибок
+  ```bash
+  bun build
+  ```
+
+### Pull Request
+
+#### Требования к PR
+
+- **Описание:** Четко опишите, что изменяется и почему
+- **Линейность:** Один PR = одна функция/исправление
+- **Размер:** Избегайте слишком больших PR (>500 строк)
+- **Тестирование:** Убедитесь, что проект собирается и работает
+
+#### Шаблон описания PR
+
+```markdown
+## Описание изменений
+Кратко опишите ваши изменения
+
+## Тип изменений
+- [ ] Исправление ошибки (fix)
+- [ ] Новая функциональность (feature)
+- [ ] Критическое изменение (breaking change)
+- [ ] Обновление документации (docs)
+
+## Тестирование
+- [ ] Код успешно собирается (`bun build`)
+- [ ] Линтер не выдает ошибок (`bun lint`)
+- [ ] Проверена работа в браузере
+- [ ] Проверена адаптивность (мобильные устройства)
+
+## Дополнительная информация
+Добавьте любую дополнительную информацию о PR
+```
+
+### Процесс ревью
+
+1. **Автоматические проверки** должны пройти успешно
+2. **Ревью кода** от мейнтейнеров проекта
+3. **Линейные комментарии** для обсуждения конкретных строк кода
+4. **Общие комментарии** для обсуждения архитектурных решений
+5. **Одобрение и мерж** после устранения замечаний
+
+### Стандарты кода
+
+- **Форматирование:** Используется Prettier (настройки в `.eslintrc.json`)
+- **Именование файлов:** `kebab-case` для компонентов и страниц
+- **Импорты:** Абсолютные пути через `@/` alias
+- **Компоненты:** Функциональные компоненты с TypeScript
+
+## Деплой
+
+Проект автоматически деплоится через GitHub Actions при push в `main` ветку.
+
+## Лицензия
+
+Проект распространяется под лицензией GPL-3.0. См. файл [LICENSE](LICENSE) для подробностей.
+
+## Связь
+
+- **Сайт:** [typst-gost.ru](https://typst-gost.ru)
+- **Репозиторий:** [github.com/typst-g7-32/website](https://github.com/typst-g7-32/website)
+- **Issues:** [github.com/typst-g7-32/website/issues](https://github.com/typst-g7-32/website/issues)
