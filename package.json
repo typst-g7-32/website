@@ -21,7 +21,10 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-pdf": "^10.3.0",
-    "react-snowfall": "^2.4.0"
+    "react-snowfall": "^2.4.0",
+    "fumadocs-core": "^16.0.3",
+    "fumadocs-mdx": "^13.0.1",
+    "fumadocs-ui": "^16.0.3"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
