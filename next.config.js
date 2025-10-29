@@ -5,9 +5,16 @@ module.exports = {
                 protocol: 'https',
                 hostname: 'github.com',
                 port: '',
-                pathname: '/typst-g7-32/typst-g7-32/**',
+                pathname: '/typst-g7-32/modern-g7-32/**',
                 search: '',
             },
+            {
+                protocol: 'https',
+                hostname: 'raw.githubusercontent.com',
+                port: '',
+                pathname: '/typst-g7-32/examples/**',
+                search: '',
+            }
         ],
     },
     webpack: (config) => {
