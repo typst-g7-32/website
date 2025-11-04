@@ -23,13 +23,14 @@ function filterCode(code: string): string {
   let hideActive = false
 
   for (const line of lines) {
-    console.log(line)
-    if (line.includes(HIDE_START)) {
+    const trimmed = line.trim()
+
+    if (trimmed.includes(HIDE_START)) {
       hideActive = true
       continue
     }
 
-    if (line.includes(HIDE_END)) {
+    if (trimmed.includes(HIDE_END)) {
       hideActive = false
       continue
     }
