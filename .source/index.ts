@@ -1,7 +1,7 @@
 // @ts-nocheck -- skip type checking
-import * as d_docs_7 from "../content/docs/reference/structural_elements/index.mdx?collection=docs"
-import * as d_docs_6 from "../content/docs/reference/elements/table.mdx?collection=docs"
-import * as d_docs_5 from "../content/docs/reference/elements/index.mdx?collection=docs"
+import * as d_docs_7 from "../content/docs/reference/elements/table.mdx?collection=docs"
+import * as d_docs_6 from "../content/docs/reference/elements/index.mdx?collection=docs"
+import * as d_docs_5 from "../content/docs/reference/structural_elements/index.mdx?collection=docs"
 import * as d_docs_4 from "../content/docs/reference/index.mdx?collection=docs"
 import * as d_docs_3 from "../content/docs/advanced_usage/index.mdx?collection=docs"
 import * as d_docs_2 from "../content/docs/advanced_usage/custom_title_template.mdx?collection=docs"
