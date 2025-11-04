@@ -1,0 +1,27 @@
+.typst-render-container {
+  --border-radius: 0.5rem;
+}
+
+.dark .typst-render-container {
+  --code-bg: hsl(222, 40%, 15%);
+  --output-bg: hsl(222, 35%, 18%);
+}
+
+.typst-render-container pre {
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.typst-render-container .object-contain {
+  max-height: 600px;
+}
+
+@media (max-width: 768px) {
+  .typst-render-container [class*="flex-row"] {
+    flex-direction: column;
+  }
+  
+  .typst-render-container [class*="w-1/2"] {
+    width: 100%;
+  }
+}

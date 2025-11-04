@@ -1,14 +1,13 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
-import { CodeExample } from '@/components/code-example';
+import { TypstRender } from '@/components/typst-render';
 import { GostQuote } from './components/docs/quote';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
-    CodeExample,
-    GostQuote,
+    TypstRender,
     ...components,
   };
 }
