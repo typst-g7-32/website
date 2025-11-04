@@ -23,12 +23,18 @@ export default withMDX({
       }
     ],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
     config.resolve.alias.canvas = false;
+
+    if (isServer) {
+      config.externals.push({
+        "@myriaddreamin/typst-ts-node-compiler": "@myriaddreamin/typst-ts-node-compiler",
+      })
+    }
 
     return config;
   },
