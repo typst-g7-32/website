@@ -2,7 +2,9 @@
 
 import { useState, useMemo } from "react"
 import Image from "next/image"
+
 import { useMDXPath } from "@/lib/mdx-path-context"
+import { EditableCodeBlock } from "./editable-code-block"
 
 import { DynamicCodeBlock } from "./fumadocs/dynamic-codeblock"
 
