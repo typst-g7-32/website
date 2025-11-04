@@ -8,7 +8,7 @@ const CONTENT_DIR = path.join(process.cwd(), 'content/docs');
 const OUTPUT_BASE = path.join(process.cwd(), 'public/docs/attachments');
 
 
-const TYPST_RENDER_REGEX = /<TypstRender\s+(?:.*?\s+)?code=\{`([^`]+)`\}(?:.*?\s+)?image=["']([^"']+)["'](?:[^>]*?)\/>/gs;
+const TYPST_RENDER_REGEX = /<TypstRender[\s\S]*?code=\{`([\s\S]*?)`[\s\S]*?image=["']([^"']+)["'][\s\S]*?\/>/g;
 
 let compiler = null;
 
@@ -30,7 +30,7 @@ async function compileTypstToImage(typstCode, outputPath) {
       mainFileContent: typstCode,
     });
 
-    await sharp(Buffer.from(svgOutput))
+    await sharp(Buffer.from(svgOutput), { density: 300 })
       .png()
       .toFile(outputPath);
 
@@ -81,8 +81,8 @@ async function processMdxFile(filePath, relativePath) {
   for (let i = 0; i < matches.length; i++) {
     let typstCode = matches[i][1];
     const imageName = matches[i][2];
-    
-    typstCode = filterHiddenCode(typstCode);
+
+    console.log(imageName);
     
     const outputPath = path.join(outputDir, imageName);
 
@@ -91,39 +91,6 @@ async function processMdxFile(filePath, relativePath) {
       console.warn(`  Skipping: ${imageName}`);
     }
   }
-}
-
-function filterHiddenCode(code) {
-  const lines = code.split('\\n');
-  let result = [];
-  let hideActive = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    
-    if (trimmed.includes('// hide-start') || trimmed.includes('// hide:')) {
-      hideActive = true;
-      continue;
-    }
-    
-    if (trimmed.includes('// hide-end') || trimmed.includes('// /hide:')) {
-      hideActive = false;
-      continue;
-    }
-    
-    if (!hideActive) {
-      result.push(line);
-    }
-  }
-
-  while (result.length > 0 && result[0].trim() === '') {
-    result.shift();
-  }
-  while (result.length > 0 && result[result.length - 1].trim() === '') {
-    result.pop();
-  }
-
-  return result.join('\\n');
 }
 
 async function main() {

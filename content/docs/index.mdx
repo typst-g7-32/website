@@ -231,3 +231,81 @@ import {
   layout="horizontal"
   title="Пример с исключенной конфигурацией"
 />
+
+<TypstRender
+  code={`// hide-start
+
+#import "@preview/modern-g7-32:0.1.0": gost, abstract
+
+#set page(width: auto, height: auto, fill: color.white)
+
+#show: gost.with(
+    hide-title: true,
+)
+
+#set page(footer: none, margin: 30pt)
+
+// hide-end
+
+#figure(
+    table(
+      columns: 2,
+        [*Количество*], [*Ингридиент*],
+        [360г.], [Мука],
+        [250г.], [Сливочное масло],
+        [150г. ], [Сахар],
+        [100г. ], [70% шоколад],
+        [2], [Яйца],
+        [Щепотка], [Соль],
+    ),
+    caption: [Рецепт шоколадного печенья],
+)
+`}
+  image="table.png"
+  title="Пример таблицы"
+/>
+
+Пример титульного листа
+<TypstRender
+  code={`// hide-start
+
+#import "@preview/modern-g7-32:0.1.0": gost, abstract
+
+#set page(fill: color.white)
+
+// hide-end
+  
+#show: gost.with(
+  ministry: "Наименование министерства (ведомства) или другого структурного образования, в систему которого входит организация-исполнитель",
+  organization: (full: "Полное наименование организации — исполнителя НИР", short: "Сокращённое наименование организации"),
+  udk: "индекс УДК",
+  research-number: "регистрационный номер НИР",
+  report-number: "регистрационный номер отчета",
+  approved-by: (
+    name: "Фамилия И.О.", 
+    position: "Должность, сокращ. наимен. орг", year: 2017
+  ), // Гриф согласования
+  agreed-by: (
+    name: "Фамилия И.О.", 
+    position: "Должность, сокращ. наимен. орг", year: auto
+  ), // Гриф утверждения, год подставляется из аргумента year
+  report-type: "отчёт",
+  about: "О научно-исследовательской работе",
+  research: "Наименование НИР",
+  bare-subject: false, // Можно убрать "по теме"
+  subject: "Наименование отчёта",
+  manager: (name: "Фамилия И.О.", position: "Должность"),
+  stage: (type: "вид отчёта", num: 1),
+  federal: "Наименование федеральной программы",
+  part: 2, // Номер книги отчёта
+  city: "Город",
+  year: auto, // Можно поменять год, auto - текущий год
+  text-size: (default: 14pt, small: 10pt), // Можно указать размеры текста
+  indent: 1.25cm, // Можно указать отступ
+  hide-title: false, // Можно скрыть титульник
+)
+`}
+  image="title.png"
+  title="Пример титульного листа"
+  layout="vertical"
+/>
