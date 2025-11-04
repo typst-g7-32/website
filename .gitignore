@@ -35,4 +35,4 @@ yarn-error.log*
 
 # Typst
 .typst/
-public/docs/attachments/*
+public/docs/attachments/**/*

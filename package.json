@@ -31,7 +31,8 @@
     "fumadocs-ui": "^16.0.3",
     "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc3",
     "@myriaddreamin/typst.ts": "^0.7.0-rc1",
-    "@types/mdx": "^2.0.13"
+    "@types/mdx": "^2.0.13",
+    "@radix-ui/react-collapsible": "^1.1.12"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
