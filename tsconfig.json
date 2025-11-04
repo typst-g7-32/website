@@ -39,6 +39,11 @@
     "**/*.d.ts",
     ".next/types/**/*.ts",
     "components/code-viewer.old",
+    ".next/dev/types/**/*.ts",
+    "src/lib/remark-typst-path.ts",
+    "src/lib/remark-typst-path.ts",
+    "src/scripts/compile-typst-examples.js",
+    "src/lib/remark-typst-path.js",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

@@ -1,4 +1,5 @@
 import { source } from '@/lib/source';
+import { MDXPathProvider } from '@/lib/mdx-path-context';
 import {
   DocsBody,
   DocsDescription,
@@ -16,20 +17,24 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const docPath = page.absolutePath
+    .replace(/\.[^/.]+$/, '')
+    .replace(/^content\/docs\//, '')
 
   return (
-    <DocsPage toc={page.data.toc} tableOfContent={{style: 'clerk'}} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody>
-        <MDX
-          components={getMDXComponents({
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-          })}
-        />
-      </DocsBody>
-    </DocsPage>
+    <MDXPathProvider docPath={docPath || 'index'}>
+      <DocsPage toc={page.data.toc} tableOfContent={{style: 'clerk'}} full={page.data.full}>
+        <DocsTitle>{page.data.title}</DocsTitle>
+        <DocsDescription>{page.data.description}</DocsDescription>
+        <DocsBody>
+          <MDX
+            components={getMDXComponents({
+              a: createRelativeLink(source, page),
+            })}
+          />
+        </DocsBody>
+      </DocsPage>
+    </MDXPathProvider>
   );
 }
 

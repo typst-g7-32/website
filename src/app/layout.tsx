@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { Banner } from 'fumadocs-ui/components/banner';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Suspense } from "react";
 
@@ -10,6 +8,8 @@ import "./globals.css";
 import '../components/sections/comparison/styles.css'
 import { defineI18nUI } from 'fumadocs-ui/i18n';
 import { i18n } from '@/lib/i18n';
+
+import "./globals.css";
 
 const siteUrl = "https://typst-gost.ru";
 const siteName = "Typst 7.32";

@@ -1,9 +1,13 @@
 {
   "name": "typst-gost",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
+    "compile:typst": "node src/scripts/compile-typst-examples.js",
+    "predev": "bun run compile:typst",
     "dev": "next dev",
+    "prebuild": "bun run compile:typst",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -24,7 +28,10 @@
     "react-snowfall": "^2.4.0",
     "fumadocs-core": "^16.0.3",
     "fumadocs-mdx": "^13.0.1",
-    "fumadocs-ui": "^16.0.3"
+    "fumadocs-ui": "^16.0.3",
+    "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc3",
+    "@myriaddreamin/typst.ts": "^0.7.0-rc1",
+    "@types/mdx": "^2.0.13"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
