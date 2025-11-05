@@ -95,7 +95,7 @@ export function TypstRender({
           throw new Error("Compiler returned invalid SVG type")
         }
 
-        // 🔧 Валидация SVG перед рендерингом
+        // Валидация SVG перед рендерингом
         const trimmedSvg = svg.trim()
         if (!trimmedSvg.startsWith("<svg")) {
           throw new Error("Invalid SVG: does not start with <svg tag")
