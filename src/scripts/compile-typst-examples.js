@@ -8,7 +8,7 @@ const CONTENT_DIR = path.join(process.cwd(), 'content/docs');
 const OUTPUT_BASE = path.join(process.cwd(), 'public/docs/attachments');
 
 
-const TYPST_RENDER_REGEX = /<TypstRender\s+(?:.*?\s+)?code=\{`([^`]+)`\}(?:.*?\s+)?image=["']([^"']+)["'](?:[^>]*?)\/>/gs;
+const TYPST_RENDER_REGEX = /<TypstRender\s+(?:[^>]*?\s+)?code=\{`((?:[^`]|`(?!}))+)`\}[^>]*?image=["']([^"']+)["'][^>]*?\/>/gs;
 
 let compiler = null;
 
