@@ -7,6 +7,40 @@ import { TypstEditor } from "./editor"
 import { TypstOutput } from "./output"
 import { DynamicCodeBlock } from "@/components/fumadocs/dynamic-codeblock"
 
+function parseTypstError(error: unknown): string {
+  // FIXME: ошибки не распашриваются
+  if (error instanceof Error) {
+    const errorStr = error.message
+
+    if (errorStr.includes("SourceDiagnostic")) {
+      try {
+        const messageMatch = errorStr.match(/message:\s*"([^"]+)"/g)
+
+        if (messageMatch && messageMatch.length > 0) {
+          // Извлекаем все сообщения об ошибках
+          const messages = messageMatch.map(match => {
+            const msg = match.match(/"([^"]+)"/)
+            return msg ? msg[1] : match
+          })
+
+          return messages.join("\n")
+        }
+      } catch (e) {
+        console.warn("Не удалось распарсить ошибку Typst:", e)
+      }
+    }
+
+    return error.message
+  }
+
+  if (typeof error === "string") {
+    return error
+  }
+
+  return "Неизвестная ошибка компиляции"
+}
+
+
 interface TypstRenderProps {
   code: string
   image: string
@@ -62,11 +96,15 @@ export function TypstRender({
 }: TypstRenderProps) {
   const [imageError, setImageError] = useState(false)
   const [compiledSvg, setCompiledSvg] = useState<string | null>(null)
-  const [isCompiling, setIsCompiling] = useState(false)
-  const [compileError, setCompileError] = useState<string | null>(null)
+  const [localCompileError, setLocalCompileError] = useState<string | null>(null)
 
   const { docPath } = useMDXPath()
-  const { compile, isLoading, error: compilerError } = useTypstCompiler()
+  const {
+    compile,
+    isLoading: compilerLoading,
+    compilerInitError,
+    compileError: hookCompileError
+  } = useTypstCompiler()
 
   const displayCode = useMemo(() => filterCode(code), [code])
 
@@ -77,42 +115,43 @@ export function TypstRender({
     return `/docs/attachments/${docPath}/${image}`
   }, [image, docPath])
 
+  const isEditable = editable && !compilerLoading && !compilerInitError && !!compile
+
   const compileCode = useCallback(
     async (codeToCompile: string) => {
       if (!compile) {
-        setCompileError("Compiler not ready")
         return
       }
 
-      setCompileError(null)
-      setIsCompiling(true)
+      setLocalCompileError(null)
 
       try {
         const svg = await compile(codeToCompile)
 
         if (!svg) {
-          throw new Error("Compiler returned empty output")
+          throw new Error("Компилятор вернул пустой результат")
         }
 
         if (typeof svg !== "string") {
-          throw new Error("Compiler returned invalid SVG type")
+          throw new Error("Компилятор вернул невалидный тип SVG")
         }
 
         const trimmedSvg = svg.trim()
         if (!trimmedSvg.startsWith("<svg")) {
-          throw new Error("Invalid SVG: does not start with <svg tag")
+          throw new Error("Невалидный SVG: не начинается с тега <svg")
         }
 
-        console.log("SVG compiled successfully, length:", svg.length)
-        setCompiledSvg(trimmedSvg)
-        setCompileError(null)
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Compilation failed"
-        setCompileError(errorMessage)
-        console.error("Compilation error:", error)
-      } finally {
-        setIsCompiling(false)
+        const processed = trimmedSvg
+        .replace(/width="[^"]*"/g, '')
+        .replace(/height="[^"]*"/g, '')
+      
+
+        setCompiledSvg(processed)
+        setLocalCompileError(null)
+      } catch (error: unknown) {
+        const errorMessage = parseTypstError(error)
+        setLocalCompileError(errorMessage)
+        console.error("Ошибка компиляции:", error)
       }
     },
     [compile]
@@ -132,6 +171,9 @@ export function TypstRender({
 
   const codeBlockClass = layout === "horizontal" ? "w-1/2" : "w-full"
 
+  // Используем локальную ошибку или ошибку из хука
+  const displayCompileError = localCompileError || hookCompileError
+
   return (
     <div className="typst-render-container my-6">
       {title && (
@@ -140,7 +182,7 @@ export function TypstRender({
 
       <div className={containerClass}>
         <div className={codeBlockClass}>
-          {editable ? (
+          {isEditable ? (
             <TypstEditor
               code={displayCode}
               onChange={handleEditorChange}
@@ -158,32 +200,14 @@ export function TypstRender({
           )}
         </div>
 
-        {compilerError ? (
-          <div className="flex-1 flex items-center justify-center p-4 bg-gray-200 rounded-lg">
-            <div className="text-red-500 text-sm text-center">
-              <div>Compiler initialization error</div>
-              <div className="text-xs mt-2 opacity-70 break-all font-mono">
-                {compilerError}
-              </div>
-            </div>
-          </div>
-        ) : isLoading ? (
-          <div className="flex-1 flex items-center justify-center p-4 bg-gray-200 rounded-lg">
-            <div className="text-fd-muted-foreground text-sm text-center">
-              <div className="animate-pulse">Loading compiler...</div>
-            </div>
-          </div>
-        ) : (
-          <TypstOutput
-            compiledSvg={compiledSvg}
-            imagePath={imagePath}
-            isCompiling={isCompiling}
-            compileError={compileError}
-            imageError={imageError}
-            onImageError={() => setImageError(true)}
-            layout={layout}
-          />
-        )}
+        <TypstOutput
+          compiledSvg={compiledSvg}
+          imagePath={imagePath}
+          compileError={displayCompileError}
+          imageError={imageError}
+          onImageError={() => setImageError(true)}
+          layout={layout}
+        />
       </div>
     </div>
   )

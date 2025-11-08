@@ -5,7 +5,6 @@ import Image from "next/image"
 interface TypstOutputProps {
   compiledSvg: string | null
   imagePath: string | null
-  isCompiling: boolean
   compileError: string | null
   imageError: boolean
   onImageError: () => void
@@ -15,7 +14,6 @@ interface TypstOutputProps {
 export function TypstOutput({
   compiledSvg,
   imagePath,
-  isCompiling,
   compileError,
   imageError,
   onImageError,
@@ -23,14 +21,15 @@ export function TypstOutput({
 }: TypstOutputProps) {
   const outputBlockClass =
     layout === "horizontal"
-      ? "w-1/2 flex items-center justify-center p-4 bg-gray-200 rounded-lg relative overflow-auto"
-      : "w-full flex items-center justify-center p-4 bg-gray-200 rounded-lg relative overflow-auto"
+      ? "w-1/2 flex items-center justify-center p-4 bg-gray-200 dark:bg-gray-800 rounded-lg relative overflow-auto"
+      : "w-full flex items-center justify-center p-4 bg-gray-200 dark:bg-gray-800 rounded-lg relative overflow-auto"
 
   return (
     <div className={outputBlockClass}>
       {compiledSvg ? (
         <div
-          className="w-full h-auto"
+          className="w-full h-full flex items-center justify-center"
+          style={{ maxWidth: '800px', maxHeight: '600px' }}
           dangerouslySetInnerHTML={{ __html: compiledSvg }}
         />
       ) : imagePath && !imageError ? (
@@ -56,21 +55,13 @@ export function TypstOutput({
         </div>
       )}
 
-      {isCompiling && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded">
-          <div className="text-fd-muted-foreground text-sm text-center animate-pulse">
-            Compiling...
-          </div>
-        </div>
-      )}
-
       {compileError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-red-500/80 rounded p-4">
-          <div className="text-white text-sm text-center">
-            <div className="font-medium">Compilation error</div>
-            <div className="text-xs mt-2 opacity-90 break-all font-mono">
-              {compileError}
-            </div>
+        <div className="absolute top-4 left-4 right-4 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md shadow-lg">
+          <div className="text-amber-700 dark:text-amber-400 text-sm font-medium mb-1">
+            Ошибка компиляции
+          </div>
+          <div className="text-amber-600 dark:text-amber-500 text-xs font-mono break-all">
+            {compileError}
           </div>
         </div>
       )}
