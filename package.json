@@ -13,6 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cmshiki/editor": "^0.1.0",
     "@emailjs/browser": "^4.4.1",
     "@fontsource/inter": "^5.2.8",
     "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc3",
@@ -29,6 +30,8 @@
     "@types/mdx": "^2.0.13",
     "canvg": "^4.0.3",
     "class-variance-authority": "^0.7.1",
+    "codemirror": "^6.0.2",
+    "codemirror-shiki": "^0.3.0",
     "emailjs": "^4.0.3",
     "fumadocs-core": "^16.0.7",
     "fumadocs-mdx": "^13.0.5",
