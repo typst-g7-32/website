@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import Image from "next/image"
-
 import { useMDXPath } from "@/lib/mdx-path-context"
 import { useTypstCompiler } from "@/hooks/use-typst-compiler"
-import { EditableCodeBlock } from "./editable-code-block"
+import { TypstEditor } from "./editor"
+import { TypstOutput } from "./output"
+import { DynamicCodeBlock } from "@/components/fumadocs/dynamic-codeblock"
 
 interface TypstRenderProps {
   code: string
@@ -13,6 +13,7 @@ interface TypstRenderProps {
   layout?: "horizontal" | "vertical"
   title?: string
   wordWrap?: boolean
+  editable?: boolean
 }
 
 const HIDE_START = "// hide-start"
@@ -57,11 +58,13 @@ export function TypstRender({
   layout = "horizontal",
   title,
   wordWrap = true,
+  editable = true,
 }: TypstRenderProps) {
   const [imageError, setImageError] = useState(false)
   const [compiledSvg, setCompiledSvg] = useState<string | null>(null)
   const [isCompiling, setIsCompiling] = useState(false)
   const [compileError, setCompileError] = useState<string | null>(null)
+
   const { docPath } = useMDXPath()
   const { compile, isLoading, error: compilerError } = useTypstCompiler()
 
@@ -95,15 +98,12 @@ export function TypstRender({
           throw new Error("Compiler returned invalid SVG type")
         }
 
-        // Валидация SVG перед рендерингом
         const trimmedSvg = svg.trim()
         if (!trimmedSvg.startsWith("<svg")) {
           throw new Error("Invalid SVG: does not start with <svg tag")
         }
 
-        // Логирование для отладки
         console.log("SVG compiled successfully, length:", svg.length)
-
         setCompiledSvg(trimmedSvg)
         setCompileError(null)
       } catch (error) {
@@ -118,7 +118,7 @@ export function TypstRender({
     [compile]
   )
 
-  const handleCodeChange = useCallback(
+  const handleEditorChange = useCallback(
     (newCode: string) => {
       compileCode(newCode)
     },
@@ -132,11 +132,6 @@ export function TypstRender({
 
   const codeBlockClass = layout === "horizontal" ? "w-1/2" : "w-full"
 
-  const outputBlockClass =
-    layout === "horizontal"
-      ? "w-1/2 flex items-center justify-center p-4 bg-gray-200 rounded-lg relative overflow-auto"
-      : "w-full flex items-center justify-center p-4 bg-gray-200 rounded-lg relative overflow-auto"
-
   return (
     <div className="typst-render-container my-6">
       {title && (
@@ -145,81 +140,50 @@ export function TypstRender({
 
       <div className={containerClass}>
         <div className={codeBlockClass}>
-          <EditableCodeBlock
-            editable={true}
-            code={displayCode}
-            lang="typst"
-            wordWrap={wordWrap}
-            onCodeChange={handleCodeChange}
-            codeblock={{
-              className: "h-full",
-            }}
-          />
+          {editable ? (
+            <TypstEditor
+              code={displayCode}
+              onChange={handleEditorChange}
+              wordWrap={wordWrap}
+            />
+          ) : (
+            <DynamicCodeBlock
+              code={displayCode}
+              lang="typst"
+              wordWrap={wordWrap}
+              codeblock={{
+                className: "h-full"
+              }}
+            />
+          )}
         </div>
 
-        <div className={outputBlockClass}>
-          {isLoading ? (
-            <div className="text-fd-muted-foreground text-sm text-center">
-              <div className="animate-pulse">Loading compiler...</div>
-            </div>
-          ) : compilerError ? (
-            <div className="text-red-500 text-sm text-center p-4">
+        {compilerError ? (
+          <div className="flex-1 flex items-center justify-center p-4 bg-gray-200 rounded-lg">
+            <div className="text-red-500 text-sm text-center">
               <div>Compiler initialization error</div>
               <div className="text-xs mt-2 opacity-70 break-all font-mono">
                 {compilerError}
               </div>
             </div>
-          ) : (
-            <>
-              {compiledSvg ? (
-                <div 
-                  className="w-full h-auto"
-                  dangerouslySetInnerHTML={{ __html: compiledSvg }}
-                />
-              ) : imagePath && !imageError ? (
-                <div className="w-full h-auto">
-                  <Image
-                    src={imagePath}
-                    alt="Typst rendered output"
-                    width={800}
-                    height={600}
-                    className="w-full h-auto object-contain"
-                    onError={() => setImageError(true)}
-                    unoptimized
-                  />
-                </div>
-              ) : (
-                <div className="text-fd-muted-foreground text-sm text-center p-4">
-                  <div>No output</div>
-                  {imagePath && (
-                    <div className="text-xs mt-2 opacity-70 break-all font-mono">
-                      {imagePath}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {isCompiling && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded">
-                  <div className="text-fd-muted-foreground text-sm text-center animate-pulse">
-                    Compiling...
-                  </div>
-                </div>
-              )}
-
-              {compileError && (
-                <div className="absolute inset-0 flex items-center justify-center bg-red-500/80 rounded p-4">
-                  <div className="text-white text-sm text-center">
-                    <div className="font-medium">Compilation error</div>
-                    <div className="text-xs mt-2 opacity-90 break-all font-mono">
-                      {compileError}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+          </div>
+        ) : isLoading ? (
+          <div className="flex-1 flex items-center justify-center p-4 bg-gray-200 rounded-lg">
+            <div className="text-fd-muted-foreground text-sm text-center">
+              <div className="animate-pulse">Loading compiler...</div>
+            </div>
+          </div>
+        ) : (
+          <TypstOutput
+            compiledSvg={compiledSvg}
+            imagePath={imagePath}
+            isCompiling={isCompiling}
+            compileError={compileError}
+            imageError={imageError}
+            onImageError={() => setImageError(true)}
+            layout={layout}
+          />
+        )}
       </div>
     </div>
   )

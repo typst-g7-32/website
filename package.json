@@ -32,7 +32,11 @@
     "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc3",
     "@myriaddreamin/typst.ts": "^0.7.0-rc1",
     "@types/mdx": "^2.0.13",
-    "@radix-ui/react-collapsible": "^1.1.12"
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "codemirror": "^6.0.2",
+    "codemirror-shiki": "^0.3.0",
+    "@cmshiki/editor": "^0.1.0",
+    "canvg": "^4.0.3"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
