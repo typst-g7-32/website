@@ -7,7 +7,8 @@ type TypstCompiler = any
 export function useTypstCompiler() {
   const [compiler, setCompiler] = useState<TypstCompiler | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [compilerInitError, setCompilerInitError] = useState<string | null>(null)
+  const [compileError, setCompileError] = useState<string | null>(null)
   const loadingRef = useRef(false)
 
   useEffect(() => {
@@ -37,9 +38,11 @@ export function useTypstCompiler() {
         })
 
         setCompiler(typst)
-        setError(null)
+        setCompilerInitError(null)
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load compiler")
+        setCompilerInitError(
+          err instanceof Error ? err.message : "Failed to load compiler"
+        )
       } finally {
         setIsLoading(false)
       }
@@ -51,7 +54,7 @@ export function useTypstCompiler() {
   const compile = useCallback(
     async (code: string): Promise<string | null> => {
       if (!compiler) {
-        setError("Compiler not initialized")
+        setCompilerInitError("Compiler not initialized")
         return null
       }
 
@@ -64,17 +67,23 @@ export function useTypstCompiler() {
           throw new Error("Compiler returned invalid output")
         }
 
-        setError(null)
+        setCompileError(null)
         return svg
       } catch (err) {
         const message = err instanceof Error ? err.message : "Compilation failed"
-        setError(message)
+        setCompileError(message)
         console.error("Compilation error:", err)
-        return null
+        throw err;
       }
     },
     [compiler]
   )
 
-  return { compiler, isLoading, error, compile }
+  return { 
+    compiler, 
+    isLoading, 
+    compilerInitError, 
+    compileError, 
+    compile 
+  }
 }
