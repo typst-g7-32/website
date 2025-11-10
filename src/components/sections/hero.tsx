@@ -16,7 +16,16 @@ export default function HeroSection() {
             </span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-5 px-2 sm:px-0">
-            Автоматизированный шаблон для оформления работ в соответствии с ГОСТ 7.32-2017. Сосредоточьтесь на содержании, а не на форматировании.
+            Автоматизированный{" "}
+            <a
+              href="https://typst.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/30 hover:decoration-blue-300/50 underline-offset-2 transition-colors"
+            >
+              Typst
+            </a>
+            {" "}шаблон для оформления работ в соответствии с ГОСТ 7.32-2017.<br/>Сосредоточьтесь на содержании, не думайте о форматировании.
           </p>
           <div className="flex justify-center gap-3 sm:gap-4">
             <Button className="w-full sm:w-auto inline-flex justify-center items-center py-3 px-5 text-sm sm:text-base font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-600 focus:ring-1">
@@ -34,7 +43,7 @@ export default function HeroSection() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-              Репозиторий
+                Репозиторий
               </a>
             </Button>
           </div>
