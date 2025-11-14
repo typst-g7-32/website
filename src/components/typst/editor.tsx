@@ -3,7 +3,7 @@
 import { useEffect, useRef, useLayoutEffect } from "react"
 import { EditorView, keymap } from '@codemirror/view'
 import { EditorState, Compartment } from '@codemirror/state'
-import { history, historyKeymap } from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import shiki from 'codemirror-shiki'
 import { createHighlighterCore } from 'shiki/core'
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma'
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { Check, Clipboard } from 'lucide-react'
 import { useCopyButton } from '@/lib/fumadocs/utils/use-copy-button'
 import { buttonVariants } from '@/components/fumadocs/button'
+import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
 
 interface TypstEditorProps {
   code: string
@@ -78,48 +79,46 @@ export function TypstEditor({
   const editorRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<EditorView | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  
-  const lineWrapCompartment = useRef(new Compartment())
-  
-  const onChangeRef = useRef(onChange)
 
+  const shikiCompartment = useRef(new Compartment())
+
+  const onChangeRef = useRef(onChange)
   useLayoutEffect(() => {
     onChangeRef.current = onChange
-  })
+  }, [onChange])
 
   useEffect(() => {
     if (!editorRef.current) return
-
     let mounted = true
 
     const init = async () => {
       if (!mounted) return
 
+      const themeId = 'github-dark'
+
       const state = EditorState.create({
-        doc: code,
+        doc: code ?? '',
         extensions: [
           history(),
           keymap.of(historyKeymap),
+          keymap.of(defaultKeymap),
+          keymap.of([indentWithTab]),
+          wordWrap ? [EditorView.lineWrapping] : [],
+          wordWrap ? wrappedLineIndent : [],
+
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-              const newCode = update.state.doc.toString()
-              onChangeRef.current(newCode)
+              const value = update.state.doc.toString()
+              onChangeRef.current(value)
             }
           }),
-          EditorView.theme({
-            '.cm-editor.cm-cursor': {
-              borderLeftColor: 'white',
-            },
-            '.cm-lineWrapping': {
-              wordBreak: "break-all",
-            }
-          }),
+          EditorView.darkTheme.of(true),
           shiki({
             highlighter: highlighterPromise,
             language: 'typst',
-            theme: 'github-dark',
+            theme: themeId,
           }),
-          lineWrapCompartment.current.of(wordWrap ? [EditorView.lineWrapping] : []),
+          shikiCompartment.current.of([]),
         ],
       })
 
@@ -143,38 +142,13 @@ export function TypstEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (!viewRef.current) return
-
-    const currentDoc = viewRef.current.state.doc.toString()
-    if (code === currentDoc) return
-
-    viewRef.current.dispatch({
-      changes: {
-        from: 0,
-        to: currentDoc.length,
-        insert: code,
-      },
-    })
-  }, [code])
-
-  useEffect(() => {
-    if (!viewRef.current) return
-
-    viewRef.current.dispatch({
-      effects: lineWrapCompartment.current.reconfigure(
-        wordWrap ? [EditorView.lineWrapping] : []
-      )
-    })
-  }, [wordWrap])
-
   return (
     <figure
       ref={containerRef}
       dir="ltr"
       className={cn(
         'my-4 bg-fd-card rounded-xl',
-        'shiki relative border shadow-sm outline-none not-prose overflow-hidden text-sm',
+        'shiki relative border shadow-sm outline-none text-sm',
         className,
       )}
     >
@@ -206,7 +180,6 @@ export function TypstEditor({
         className={cn(
           'text-[13px] py-3.5 overflow-auto max-h-[600px] fd-scroll-container',
           !title && 'pr-8',
-          wordWrap ? '[&_.cm-line]:whitespace-normal' : '[&_.cm-line]:whitespace-pre'
         )}
         style={
           {

@@ -6,40 +6,7 @@ import { useTypstCompiler } from "@/hooks/use-typst-compiler"
 import { TypstEditor } from "./editor"
 import { TypstOutput } from "./output"
 import { DynamicCodeBlock } from "@/components/fumadocs/dynamic-codeblock"
-
-function parseTypstError(error: unknown): string {
-  // FIXME: ошибки не распашриваются
-  if (error instanceof Error) {
-    const errorStr = error.message
-
-    if (errorStr.includes("SourceDiagnostic")) {
-      try {
-        const messageMatch = errorStr.match(/message:\s*"([^"]+)"/g)
-
-        if (messageMatch && messageMatch.length > 0) {
-          // Извлекаем все сообщения об ошибках
-          const messages = messageMatch.map(match => {
-            const msg = match.match(/"([^"]+)"/)
-            return msg ? msg[1] : match
-          })
-
-          return messages.join("\n")
-        }
-      } catch (e) {
-        console.warn("Не удалось распарсить ошибку Typst:", e)
-      }
-    }
-
-    return error.message
-  }
-
-  if (typeof error === "string") {
-    return error
-  }
-
-  return "Неизвестная ошибка компиляции"
-}
-
+import { formatTypstError, parseTypstError } from "@/lib/typst/error-parser"
 
 interface TypstRenderProps {
   code: string
@@ -129,16 +96,16 @@ export function TypstRender({
         const svg = await compile(codeToCompile)
 
         if (!svg) {
-          throw new Error("Компилятор вернул пустой результат")
+          throw new Error("Compiler returned empty result")
         }
 
         if (typeof svg !== "string") {
-          throw new Error("Компилятор вернул невалидный тип SVG")
+          throw new Error("Compiler returned invalid type of SVG")
         }
 
         const trimmedSvg = svg.trim()
         if (!trimmedSvg.startsWith("<svg")) {
-          throw new Error("Невалидный SVG: не начинается с тега <svg")
+          throw new Error("Invalid svg: does not start with <svg")
         }
 
         const processed = trimmedSvg
@@ -149,9 +116,10 @@ export function TypstRender({
         setCompiledSvg(processed)
         setLocalCompileError(null)
       } catch (error: unknown) {
-        const errorMessage = parseTypstError(error)
-        setLocalCompileError(errorMessage)
-        console.error("Ошибка компиляции:", error)
+        const parsedError = parseTypstError(error)
+        const message = formatTypstError(parsedError)
+        setLocalCompileError(message)
+        console.log("Compilation error:", error)
       }
     },
     [compile]
@@ -171,7 +139,6 @@ export function TypstRender({
 
   const codeBlockClass = layout === "horizontal" ? "w-1/2" : "w-full"
 
-  // Используем локальную ошибку или ошибку из хука
   const displayCompileError = localCompileError || hookCompileError
 
   return (

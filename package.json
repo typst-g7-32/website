@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.1",
     "codemirror": "^6.0.2",
     "codemirror-shiki": "^0.3.0",
+    "codemirror-wrapped-line-indent": "^1.0.9",
     "emailjs": "^4.0.3",
     "fumadocs-core": "^16.0.7",
     "fumadocs-mdx": "^13.0.5",
