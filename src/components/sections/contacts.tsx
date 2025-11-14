@@ -69,7 +69,9 @@ export default function ContactSection() {
         document.execCommand("copy")
         setCopied(label)
         setTimeout(() => setCopied(null), 2000)
-      } catch {}
+      } catch {
+        console.error("Failed to copy text to clipboard")
+      }
       document.body.removeChild(textArea)
     }
   }

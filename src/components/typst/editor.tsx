@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useLayoutEffect } from "react"
 import { EditorView, keymap } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import { EditorState, Compartment } from '@codemirror/state'
 import { history, historyKeymap } from '@codemirror/commands'
 import shiki from 'codemirror-shiki'
 import { createHighlighterCore } from 'shiki/core'
@@ -78,16 +78,21 @@ export function TypstEditor({
   const editorRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<EditorView | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  
+  const lineWrapCompartment = useRef(new Compartment())
+  
+  const onChangeRef = useRef(onChange)
 
-  // Инициализация редактора
+  useLayoutEffect(() => {
+    onChangeRef.current = onChange
+  })
+
   useEffect(() => {
     if (!editorRef.current) return
 
     let mounted = true
 
     const init = async () => {
-      const highlighter = await highlighterPromise
-
       if (!mounted) return
 
       const state = EditorState.create({
@@ -98,12 +103,15 @@ export function TypstEditor({
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
               const newCode = update.state.doc.toString()
-              onChange(newCode)
+              onChangeRef.current(newCode)
             }
           }),
           EditorView.theme({
             '.cm-editor.cm-cursor': {
               borderLeftColor: 'white',
+            },
+            '.cm-lineWrapping': {
+              wordBreak: "break-all",
             }
           }),
           shiki({
@@ -111,6 +119,7 @@ export function TypstEditor({
             language: 'typst',
             theme: 'github-dark',
           }),
+          lineWrapCompartment.current.of(wordWrap ? [EditorView.lineWrapping] : []),
         ],
       })
 
@@ -131,9 +140,9 @@ export function TypstEditor({
         viewRef.current = null
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Синхронизация содержимого при изменении кода извне
   useEffect(() => {
     if (!viewRef.current) return
 
@@ -148,6 +157,16 @@ export function TypstEditor({
       },
     })
   }, [code])
+
+  useEffect(() => {
+    if (!viewRef.current) return
+
+    viewRef.current.dispatch({
+      effects: lineWrapCompartment.current.reconfigure(
+        wordWrap ? [EditorView.lineWrapping] : []
+      )
+    })
+  }, [wordWrap])
 
   return (
     <figure
