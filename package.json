@@ -10,7 +10,8 @@
     "prebuild": "bun run compile:typst",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --ext .ts,.tsx . --fix"
   },
   "dependencies": {
     "@cmshiki/editor": "^0.1.0",
@@ -46,7 +47,8 @@
     "react-dom": "19.2.0",
     "react-innertext": "^1.1.5",
     "react-syntax-highlighter": "^15.6.1",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "typescript-eslint": "^8.46.4"
   },
   "devDependencies": {
     "@shikijs/transformers": "^3.14.0",
@@ -58,8 +60,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "eslint": "^8",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
+    "eslint": "^9.39.1",
     "eslint-config-next": "14.2.16",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
     "hast-util-to-jsx-runtime": "^2.3.2",
     "postcss": "^8.5.6",
     "shiki": "^3.14.0",

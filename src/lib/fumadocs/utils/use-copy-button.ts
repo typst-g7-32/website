@@ -3,6 +3,7 @@ import {
   type MouseEventHandler,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -14,7 +15,9 @@ export function useCopyButton(
   const callbackRef = useRef(onCopy);
   const timeoutRef = useRef<number | null>(null);
 
-  callbackRef.current = onCopy;
+  useLayoutEffect(() => {
+    callbackRef.current = onCopy;
+  });
 
   const onClick: MouseEventHandler = useCallback(() => {
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
@@ -28,7 +31,6 @@ export function useCopyButton(
     });
   }, []);
 
-  // Avoid updates after being unmounted
   useEffect(() => {
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);

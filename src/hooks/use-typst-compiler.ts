@@ -3,10 +3,10 @@
 import { getTypstCompilerUrl, getTypstRendererUrl } from '@/lib/config/typst';
 import { useEffect, useRef, useState, useCallback } from "react"
 
-type TypstCompiler = any
+type TypstModule = Window['$typst']
 
 export function useTypstCompiler() {
-  const [compiler, setCompiler] = useState<TypstCompiler | null>(null)
+  const [compiler, setCompiler] = useState<TypstModule>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [compilerInitError, setCompilerInitError] = useState<string | null>(null)
   const [compileError, setCompileError] = useState<string | null>(null)
@@ -22,7 +22,7 @@ export function useTypstCompiler() {
           "@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.js"
         )
 
-        const typst = (window as any).$typst
+        const typst = window.$typst
 
         if (!typst) {
           throw new Error("Typst module not loaded")

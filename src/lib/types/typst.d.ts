@@ -1,9 +1,4 @@
 declare module "@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.js" {
-  interface TypstCompiler {
-    svg(options: { mainFileContent: string }): Promise<string>
-    render(options: { mainFileContent: string }): Promise<any>
-  }
-
   interface TypstModule {
     setCompilerInitOptions(options: {
       getModule: () => string
@@ -11,8 +6,8 @@ declare module "@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.
     setRendererInitOptions(options: {
       getModule: () => string
     }): void
-    svg(options: { mainFileContent: string }): Promise<string>
-    render(options: { mainFileContent: string }): Promise<any>
+    svg(options: { mainContent: string }): Promise<string>  // Изменено с mainFileContent
+    render(options: { mainContent: string }): Promise<unknown>  // Изменено с mainFileContent
   }
 
   const typst: TypstModule
@@ -21,6 +16,6 @@ declare module "@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.
 
 declare global {
   interface Window {
-    $typst: any
+    $typst: TypstModule | undefined
   }
 }
