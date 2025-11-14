@@ -1,10 +1,10 @@
 import { createHighlighterCore } from 'shiki/core'
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma'
-import type { Highlighter } from 'shiki'
+import type { HighlighterCore } from 'shiki'
 
-let highlighterPromise: Promise<Highlighter> | null = null
+let highlighterPromise: Promise<HighlighterCore> | null = null
 
-export function getShikiHighlighter(): Promise<Highlighter> {
+export function getShikiHighlighter(): Promise<HighlighterCore> {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighterCore({
       langs: [
