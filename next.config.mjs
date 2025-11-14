@@ -28,15 +28,21 @@ export default withMDX({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-    config.resolve.alias.canvas = false;
 
-    if (isServer) {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false,
+      };
+    } else {
       config.externals.push({
+        canvas: 'canvas',
         "@myriaddreamin/typst-ts-node-compiler": "@myriaddreamin/typst-ts-node-compiler",
-      })
+      });
     }
 
     return config;
   },
+  serverExternalPackages: ['pdfjs-dist'],
   reactStrictMode: true,
 });
