@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -23,8 +23,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/.source": [".source"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/.source": [
+        ".source"
+      ]
     },
     "target": "ES2017"
   },
@@ -32,8 +36,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "components/code-viewer.old"  ],
+    ".next/types/**/*.ts",
+    "components/code-viewer.old",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
