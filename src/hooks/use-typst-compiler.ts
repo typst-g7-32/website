@@ -43,6 +43,10 @@ export function useTypstCompiler() {
     }
 
     initCompiler()
+
+    return () => {
+      loadingRef.current = false
+    }
   }, [])
 
   const compile = useCallback(
