@@ -21,7 +21,7 @@ export function useTypstCompiler() {
         await import(
           "@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.js"
         )
-
+        
         const typst = window.$typst
 
         if (!typst) {
@@ -67,10 +67,9 @@ export function useTypstCompiler() {
 
         setCompileError(null)
         return svg
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Compilation failed"
-        setCompileError(message)
-        console.error("Compilation error:", err)
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : "Unknown error"
+        setCompileError(errorMessage)
         throw err;
       }
     },

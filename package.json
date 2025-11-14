@@ -36,6 +36,7 @@
     "@radix-ui/react-collapsible": "^1.1.12",
     "codemirror": "^6.0.2",
     "codemirror-shiki": "^0.3.0",
+    "codemirror-wrapped-line-indent": "^1.0.9",
     "@cmshiki/editor": "^0.1.0",
     "canvg": "^4.0.3"
   },
