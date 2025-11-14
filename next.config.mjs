@@ -41,16 +41,13 @@ const config = {
       };
     } else {
       config.externals.push({
-        canvas: "canvas",
-      });
-      config.externals.push({
-        "@myriaddreamin/typst-ts-node-compiler":
-          "@myriaddreamin/typst-ts-node-compiler",
+        canvas: 'canvas',
+        "@myriaddreamin/typst-ts-node-compiler": "@myriaddreamin/typst-ts-node-compiler",
       });
     }
     return config;
   },
-  serverExternalPackages: ["pdfjs-dist"],
+  serverExternalPackages: ['pdfjs-dist'],
   reactStrictMode: true,
 };
 
