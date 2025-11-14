@@ -31,6 +31,7 @@ async function compileTypstToImage(typstCode, outputPath) {
     });
 
     await sharp(Buffer.from(svgOutput))
+      .withMetadata({ density: 300 })
       .png()
       .toFile(outputPath);
 
