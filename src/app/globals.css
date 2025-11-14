@@ -2,6 +2,24 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  #nd-docs-layout {
+    --fd-layout-offset: 40pt !important;
+  }
+
+  #nd-page {
+    --fd-page-width: 95%;
+  }
+  
+  #nd-toc {
+    inset-inline-end: max(var(--fd-layout-offset), calc(50vw - var(--fd-sidebar-width)/2 - var(--fd-page-width)/2)) !important;
+  }
+}
+
 .dark {
   --color-fd-background: hsl(222, 47%, 11%);
   --color-fd-foreground: hsl(0, 0%, 98%);

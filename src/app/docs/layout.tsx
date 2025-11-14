@@ -7,7 +7,10 @@ import '@/styles/typst-render.css';
 export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
-      tree={source.pageTree} 
+      tree={source.pageTree}
+      containerProps={{
+        className: "mx-(--fd-layout-offset)",
+      }}
       {...baseOptions()}
     >
       {children}
