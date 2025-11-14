@@ -1,5 +1,6 @@
 "use client"
 
+import { getTypstCompilerUrl, getTypstRendererUrl } from '@/lib/config/typst';
 import { useEffect, useRef, useState, useCallback } from "react"
 
 type TypstCompiler = any
@@ -27,15 +28,8 @@ export function useTypstCompiler() {
           throw new Error("Typst module not loaded")
         }
 
-        typst.setCompilerInitOptions({
-          getModule: () =>
-            "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm",
-        })
-
-        typst.setRendererInitOptions({
-          getModule: () =>
-            "https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm",
-        })
+        typst.setCompilerInitOptions({ getModule: getTypstCompilerUrl });
+        typst.setRendererInitOptions({ getModule: getTypstRendererUrl });
 
         setCompiler(typst)
         setCompilerInitError(null)
