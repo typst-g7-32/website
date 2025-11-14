@@ -23,8 +23,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/.source": [".source"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/.source": [
+        ".source"
+      ]
     },
     "target": "ES2017"
   },
