@@ -1,4 +1,4 @@
-# typst-gost Website
+# Сайт Typst 7.32
 
 Официальный сайт проекта modern-g7-32 - шаблон для оформления документов в соответствии с ГОСТ 7.32-2017.
 
@@ -81,6 +81,33 @@ bun lint         # Проверка кода линтером
 - **[Nextra документация](https://nextra.site/docs)** - руководство по созданию документации
 - **[Tailwind CSS документация](https://tailwindcss.com/docs)** - справочник по стилизации
 - **[Bun документация](https://bun.sh/docs)** - руководство по использованию Bun
+
+## Обновление версии Typst
+
+При выходе новой версии Typst необходимо обновить версии в двух местах:
+
+1. **Файл конфигурации** `src/lib/config/typst.ts`:
+```typescript
+export const TYPST_CONFIG = {
+   version: '0.7.0-rc1', // ← обновить версию
+   cdn: 'https://cdn.jsdelivr.net/npm',
+} as const;
+```
+
+2. **Зависимости в** `package.json`:
+```json
+{
+   "dependencies": {
+      "@myriaddreamin/typst-ts-node-compiler": "^0.7.0-rc1",
+      "@myriaddreamin/typst.ts": "^0.7.0-rc1"
+   }
+}
+```
+
+3. **Установите обновленные зависимости:**
+```bash
+bun install
+```
 
 ## Правила контрибуции
 

@@ -16,7 +16,7 @@
     "@cmshiki/editor": "^0.1.0",
     "@emailjs/browser": "^4.4.1",
     "@fontsource/inter": "^5.2.8",
-    "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc3",
+    "@myriaddreamin/typst-ts-node-compiler": "^0.7.0-rc1",
     "@myriaddreamin/typst.ts": "^0.7.0-rc1",
     "@next/third-parties": "^16.0.1",
     "@radix-ui/react-collapsible": "^1.1.12",
