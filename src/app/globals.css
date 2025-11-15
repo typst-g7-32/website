@@ -8,7 +8,7 @@
 
 @media (min-width: 1024px) {
   #nd-docs-layout {
-    --fd-layout-offset: 40pt !important;
+    --fd-layout-offset: 20pt !important;
   }
 
   #nd-page {
@@ -18,6 +18,18 @@
   #nd-toc {
     inset-inline-end: max(var(--fd-layout-offset), calc(50vw - var(--fd-sidebar-width)/2 - var(--fd-page-width)/2)) !important;
   }
+}
+
+blockquote {
+  padding-inline-start: 0 !important
+}
+
+.prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 0 !important;
+} 
+
+:where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  padding-inline-start: 0 !important;
 }
 
 .dark {

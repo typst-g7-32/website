@@ -1,3 +1,5 @@
+'use client';
+
 import innerText from 'react-innertext';
 
 interface QuoteProps {
@@ -20,17 +22,31 @@ export function GostQuote({ children, page }: QuoteProps) {
   
   return (
     <blockquote className="not-italic">
-      <p>{innerText(children)}</p>
-      <footer className="text-sm -mt-5 text-right">
-        <a 
-          href={pdfLink} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="hover:underline inline-block pl-4"
-        >
-          ГОСТ 7.32-2017, стр. {page}
-        </a>
-      </footer>
+      <div
+        className="relative pl-6 py-4 rounded-r-lg transition-all hover:border-l-primary/60"
+        style={{
+          background: "linear-gradient(to right, color-mix(in srgb, var(--color-fd-border) 30%, transparent), transparent)"
+        }}
+      >
+        
+        {/* Quote text */}
+        <p className="text-foreground/85 leading-relaxed italic font-medium hyphens-auto">
+          {innerText(children)}
+        </p>
+        
+        {/* Footer with GOST reference */}
+        <footer className="text-xs text-muted-foreground mt-3 flex items-center justify-between">
+          <span className="text-primary/60 font-semibold">ГОСТ 7.32-2017</span>
+          <a 
+            href={pdfLink} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary hover:text-primary/80 hover:underline transition-colors font-medium"
+          >
+            страница {page} →
+          </a>
+        </footer>
+      </div>
     </blockquote>
   );
 }
