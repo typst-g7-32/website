@@ -37,6 +37,7 @@ export function useTypstCompiler() {
         setCompilerInitError(
           err instanceof Error ? err.message : "Failed to load compiler"
         )
+        console.error("Failed to load Typst compiler:", err)
       } finally {
         setIsLoading(false)
       }
