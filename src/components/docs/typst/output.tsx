@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LoadingSpinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/cn"
 
@@ -24,6 +24,25 @@ export function TypstOutput({
 }: TypstOutputProps) {
   const [imageLoading, setImageLoading] = useState(true)
   const [svgLoading, setSvgLoading] = useState(true)
+
+  useEffect(() => {
+    if (compiledSvg) {
+      const timer = setTimeout(() => {
+        setSvgLoading(false)
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+  }, [compiledSvg])
+
+  useEffect(() => {
+    if (imagePath) {
+      const timer = setTimeout(() => {
+        setImageLoading(false)
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+  }, [imagePath])
+
 
   const outputBlockClass =
     layout === "horizontal"
@@ -49,12 +68,6 @@ export function TypstOutput({
           )}
           style={{ maxWidth: '800px', maxHeight: '600px' }}
           dangerouslySetInnerHTML={{ __html: compiledSvg }}
-          onLoad={() => setSvgLoading(false)}
-          ref={(el) => {
-            if (el && compiledSvg) {
-              setSvgLoading(false)
-            }
-          }}
         />
       ) : imagePath && !imageError ? (
         <Image
@@ -85,8 +98,7 @@ export function TypstOutput({
       ) : null}
 
       {compileError && (
-        <div
-          className="absolute top-4 left-4 right-4 p-3 bg-amber-50 dark:bg-amber-950/60 backdrop-blur-md border border-amber-200 dark:border-amber-800 rounded-md shadow-lg z-20">
+        <div className="absolute top-4 left-4 right-4 p-3 bg-amber-50 dark:bg-amber-950/60 backdrop-blur-md border border-amber-200 dark:border-amber-800 rounded-md shadow-lg z-20">
           <div className="text-amber-700 dark:text-amber-400 text-sm font-medium mb-1">
             Ошибка компиляции
           </div>
