@@ -4,11 +4,12 @@ import sharp from 'sharp';
 
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
 
+import { DEFAULT_HIDDEN_PREFIX, DEFAULT_HIDDEN_SUFFIX } from '../lib/typst/constants.js';
+
 const CONTENT_DIR = path.join(process.cwd(), 'content/docs');
 const OUTPUT_BASE = path.join(process.cwd(), 'public/docs/attachments');
 
-
-const TYPST_RENDER_REGEX = /<TypstRender\s+(?:[^>]*?\s+)?code=\{`((?:[^`]|`(?!}))+)`\}[^>]*?image=["']([^"']+)["'][^>]*?\/>/gs;
+const TYPST_RENDER_REGEX = /<TypstRender\s+([^>]+?)\/>/gs;
 
 let compiler = null;
 
@@ -20,6 +21,12 @@ async function getCompiler() {
   compiler = NodeCompiler.create();
 
   return compiler;
+}
+
+function buildFullCode(code, hiddenPrefix, hiddenSuffix) {
+  const prefix = hiddenPrefix || '';
+  const suffix = hiddenSuffix || '';
+  return `${prefix}${code}${suffix}`;
 }
 
 async function compileTypstToImage(typstCode, outputPath) {
@@ -41,6 +48,57 @@ async function compileTypstToImage(typstCode, outputPath) {
     console.log(error);
     return false;
   }
+}
+
+function parseTypstRenderProps(propsString) {
+  const props = {};
+
+  // Извлекаем code={`...`}
+  const codeMatch = propsString.match(/code=\{`((?:[^`\\]|\\.|`(?!}))+)`\}/s);
+  if (codeMatch) {
+    props.code = codeMatch[1]
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\`/g, '`');
+  }
+
+  // Извлекаем image="..."
+  const imageMatch = propsString.match(/image=["']([^"']+)["']/);
+  if (imageMatch) {
+    props.image = imageMatch[1];
+  }
+
+  // Извлекаем hiddenPrefix={`...`} или hiddenPrefix={null}
+  const prefixMatch = propsString.match(/hiddenPrefix=\{(?:`((?:[^`\\]|\\.|`(?!}))+)`|(null))\}/s);
+  if (prefixMatch) {
+    if (prefixMatch[2] === 'null') {
+      props.hiddenPrefix = null;
+    } else if (prefixMatch[1]) {
+      props.hiddenPrefix = prefixMatch[1]
+        .replace(/\\n/g, '\n')
+        .replace(/\\t/g, '\t')
+        .replace(/\\`/g, '`');
+    }
+  } else {
+    props.hiddenPrefix = DEFAULT_HIDDEN_PREFIX;
+  }
+
+  // Извлекаем hiddenSuffix={`...`} или hiddenSuffix={null}
+  const suffixMatch = propsString.match(/hiddenSuffix=\{(?:`((?:[^`\\]|\\.|`(?!}))+)`|(null))\}/s);
+  if (suffixMatch) {
+    if (suffixMatch[2] === 'null') {
+      props.hiddenSuffix = null;
+    } else if (suffixMatch[1]) {
+      props.hiddenSuffix = suffixMatch[1]
+        .replace(/\\n/g, '\n')
+        .replace(/\\t/g, '\t')
+        .replace(/\\`/g, '`');
+    }
+  } else {
+    props.hiddenSuffix = DEFAULT_HIDDEN_SUFFIX;
+  }
+
+  return props;
 }
 
 async function processDirectory(dir, relativePath = '') {
@@ -79,51 +137,23 @@ async function processMdxFile(filePath, relativePath) {
   }
 
   for (let i = 0; i < matches.length; i++) {
-    let typstCode = matches[i][1];
-    const imageName = matches[i][2];
+    const propsString = matches[i][1];
+    const props = parseTypstRenderProps(propsString);
     
-    typstCode = filterHiddenCode(typstCode);
-    
-    const outputPath = path.join(outputDir, imageName);
+    if (!props.code || !props.image) {
+      console.warn(`  Skipping component ${i + 1}: missing code or image`);
+      continue;
+    }
 
-    const success = await compileTypstToImage(typstCode, outputPath);
+    const fullCode = buildFullCode(props.code, props.hiddenPrefix, props.hiddenSuffix);
+    
+    const outputPath = path.join(outputDir, props.image);
+
+    const success = await compileTypstToImage(fullCode, outputPath);
     if (!success) {
-      console.warn(`  Skipping: ${imageName}`);
+      console.warn(`  Skipping: ${props.image}`);
     }
   }
-}
-
-function filterHiddenCode(code) {
-  const lines = code.split('\\n');
-  let result = [];
-  let hideActive = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    
-    if (trimmed.includes('// hide-start') || trimmed.includes('// hide:')) {
-      hideActive = true;
-      continue;
-    }
-    
-    if (trimmed.includes('// hide-end') || trimmed.includes('// /hide:')) {
-      hideActive = false;
-      continue;
-    }
-    
-    if (!hideActive) {
-      result.push(line);
-    }
-  }
-
-  while (result.length > 0 && result[0].trim() === '') {
-    result.shift();
-  }
-  while (result.length > 0 && result[result.length - 1].trim() === '') {
-    result.pop();
-  }
-
-  return result.join('\\n');
 }
 
 async function main() {
