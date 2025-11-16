@@ -44,8 +44,10 @@
     "src/lib/remark-typst-path.ts",
     "src/scripts/compile-typst-examples.js",
     "src/lib/remark-typst-path.js",
-    ".next/dev/types/**/*.ts"
-, "src/lib/typst/constants.js"  ],
+    ".next/dev/types/**/*.ts",
+    "src/lib/typst/constants.js",
+    "src/scripts/generate-quote-registry.js"
+  ],
   "exclude": [
     "node_modules"
   ]

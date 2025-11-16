@@ -1,9 +1,5 @@
 'use client';
 
-import innerText from 'react-innertext';
-import { useQuotes } from '@/contexts/quote-context';
-import { useEffect, useMemo } from 'react';
-
 interface QuoteProps {
   page: number;
   id: string;
@@ -13,23 +9,14 @@ interface QuoteProps {
 const PDF_URL = "/documents/gost-7.32-2017.pdf";
 
 export function GostQuote({ children, page, id }: QuoteProps) {
-  const { registerQuote } = useQuotes();
   const pdfLink = `${PDF_URL}#page=${page}`;
   
-  const text = useMemo(() => innerText(children), [children]);
-
-  useEffect(() => {
-    if (id && text && page) {
-      registerQuote(id, text, page, children);
-    }
-  }, [id, text, page, children, registerQuote]);
-  
   if (!children) {
-    console.error(`Quote text is not defined`);
+    console.error(`Quote text is not defined for id: ${id}`);
   }
 
   if (!page) {
-    console.error(`Page number is not defined for quote`);
+    console.error(`Page number is not defined for quote id: ${id}`);
   }
   
   return (

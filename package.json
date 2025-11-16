@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "compile:typst": "node src/scripts/compile-typst-examples.js",
-    "predev": "bun run compile:typst",
+    "generate:quotes": "node src/scripts/generate-quote-registry.js",
+    "predev": "bun run compile:typst && bun run generate:quotes",
     "dev": "next dev",
-    "prebuild": "bun run compile:typst",
+    "prebuild": "bun run compile:typst && bun run generate:quotes",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .ts,.tsx .",

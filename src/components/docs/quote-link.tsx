@@ -3,14 +3,30 @@
 import * as HoverCard from '@radix-ui/react-hover-card';
 import { useQuotes } from '@/contexts/quote-context';
 import { useState, useCallback, useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import Markdown from 'markdown-to-jsx';
 
 interface QuoteLinkProps {
     href: string;
     children?: React.ReactNode;
 }
 
+function CustomLink({ href, children }: QuoteLinkProps) {
+    const { getQuote } = useQuotes();
+    if (href?.startsWith('#')) {
+        const quoteId = href.slice(1).split(',')[0];
+        const quote = getQuote(quoteId);
+        if (quote) {
+            href = `${quote.pagePath}#${quoteId}`;
+        }
+    }
+    return <a href={href} className="text-primary hover:underline">{children}</a>;
+}
+
 export function QuoteLink({ href, children }: QuoteLinkProps) {
     const { getQuote } = useQuotes();
+    const router = useRouter();
+    const pathname = usePathname();
     const [boundary, setBoundary] = useState<Element | null>(null);
 
     const quoteIds = useMemo(() => {
@@ -23,6 +39,13 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
             .map(id => getQuote(id))
             .filter((quote): quote is NonNullable<typeof quote> => quote !== null && quote !== undefined);
     }, [quoteIds, getQuote]);
+
+    const actualHref = useMemo(() => {
+        if (quotes.length === 0) return href;
+        const firstQuote = quotes[0];
+        return `${firstQuote.pagePath}#${quoteIds[0]}`;
+    }, [quotes, quoteIds, href]);
+
 
     const linkRef = useCallback((node: HTMLAnchorElement | null) => {
         if (node) {
@@ -37,16 +60,24 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
         if (quoteIds.length > 0) {
             e.preventDefault();
             const firstId = quoteIds[0];
-            const element = document.getElementById(firstId);
-            if (element) {
-                element.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-                window.history.pushState(null, '', `#${firstId}`);
+            const quote = getQuote(firstId);
+
+            if (quote) {
+                if (quote.pagePath !== pathname) {
+                    router.push(`${quote.pagePath}#${firstId}`);
+                } else {
+                    const element = document.getElementById(firstId);
+                    if (element) {
+                        element.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        window.history.pushState(null, '', `#${firstId}`);
+                    }
+                }
             }
         }
-    }, [quoteIds]); 
+    }, [quoteIds, getQuote, router, pathname]);
 
     if (quotes.length === 0) {
         return (
@@ -65,7 +96,7 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
             <HoverCard.Trigger asChild>
                 <a
                     ref={linkRef}
-                    href={href}
+                    href={actualHref}
                     onClick={handleClick}
                     className="text-primary hover:underline cursor-pointer"
                 >
@@ -89,7 +120,15 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
                         {quotes.map((quote, index) => (
                             <div key={index} className={index > 0 ? 'pt-3 border-t border-border/50' : ''}>
                                 <div className="text-sm prose text-foreground/85 italic leading-relaxed">
-                                    {quote.children}
+                                    <Markdown
+                                        options={{
+                                            overrides: {
+                                                a: { component: CustomLink }
+                                            }
+                                        }}
+                                    >
+                                        {quote.text}
+                                    </Markdown>
                                 </div>
                                 <footer className="text-xs text-muted-foreground flex items-center justify-between pt-2">
                                     <span className="text-primary/60 font-semibold">ГОСТ 7.32-2017</span>
