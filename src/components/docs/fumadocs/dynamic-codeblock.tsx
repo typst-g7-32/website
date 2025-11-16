@@ -1,5 +1,5 @@
 'use client';
-import { CodeBlock, type CodeBlockProps, Pre } from '@/components/fumadocs/codeblock';
+import { CodeBlock, type CodeBlockProps, Pre } from '@/components/docs/fumadocs/codeblock';
 import type {
   HighlightOptions,
   HighlightOptionsCommon,

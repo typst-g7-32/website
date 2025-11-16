@@ -21,6 +21,7 @@
     "@myriaddreamin/typst.ts": "^0.7.0-rc1",
     "@next/third-parties": "^16.0.1",
     "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-hover-card": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.15",
     "@react-pdf-viewer/core": "^3.12.0",

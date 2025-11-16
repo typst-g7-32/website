@@ -5,14 +5,13 @@ import { useMDXPath } from "@/lib/mdx-path-context"
 import { useTypstCompiler } from "@/hooks/use-typst-compiler"
 import { TypstEditor } from "./editor"
 import { TypstOutput } from "./output"
-import { DynamicCodeBlock } from "@/components/fumadocs/dynamic-codeblock"
+import { DynamicCodeBlock } from "@/components/docs/fumadocs/dynamic-codeblock"
 import { formatTypstError, parseTypstError } from "@/lib/typst/error-parser"
 
 interface TypstRenderProps {
   code: string
   image: string
   layout?: "horizontal" | "vertical"
-  title?: string
   wordWrap?: boolean
   editable?: boolean
 }
@@ -57,7 +56,6 @@ export function TypstRender({
   code,
   image,
   layout = "horizontal",
-  title,
   wordWrap = true,
   editable = true,
 }: TypstRenderProps) {
@@ -143,12 +141,8 @@ export function TypstRender({
 
   return (
     <div className="typst-render-container my-6">
-      {title && (
-        <h4 className="text-sm font-medium mb-3 text-fd-foreground">{title}</h4>
-      )}
-
       <div className={containerClass}>
-        <div className={codeBlockClass}>
+        <div className={`${codeBlockClass}`}>
           {isEditable ? (
             <TypstEditor
               code={displayCode}

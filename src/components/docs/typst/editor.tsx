@@ -10,7 +10,7 @@ import { createOnigurumaEngine } from 'shiki/engine/oniguruma'
 import { cn } from '@/lib/utils'
 import { Check, Clipboard } from 'lucide-react'
 import { useCopyButton } from '@/lib/fumadocs/utils/use-copy-button'
-import { buttonVariants } from '@/components/fumadocs/button'
+import { buttonVariants } from '@/components/docs/fumadocs/button'
 import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
 
 interface TypstEditorProps {
@@ -148,7 +148,7 @@ export function TypstEditor({
       dir="ltr"
       className={cn(
         'my-4 bg-fd-card rounded-xl',
-        'shiki relative border shadow-sm outline-none text-sm',
+        'shiki relative border shadow-sm outline-none text-sm mt-0 mb-0',
         className,
       )}
     >

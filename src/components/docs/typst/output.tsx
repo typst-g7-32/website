@@ -33,17 +33,15 @@ export function TypstOutput({
           dangerouslySetInnerHTML={{ __html: compiledSvg }}
         />
       ) : imagePath && !imageError ? (
-        <div className="w-full h-auto">
-          <Image
-            src={imagePath}
-            alt="Typst rendered output"
-            width={800}
-            height={600}
-            className="w-full h-auto object-contain"
-            onError={onImageError}
-            unoptimized
-          />
-        </div>
+        <Image
+          src={imagePath}
+          alt="Typst rendered output"
+          width={800}
+          height={600}
+          className="w-full h-auto object mt-0 mb-0"
+          onError={onImageError}
+          unoptimized
+        />
       ) : (
         <div className="text-fd-muted-foreground text-sm text-center p-4">
           <div>No output</div>
