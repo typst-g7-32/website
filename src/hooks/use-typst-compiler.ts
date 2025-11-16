@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, useCallback } from "react"
 
 type TypstModule = Window['$typst']
 
+let typstInitialized = false
+
 export function useTypstCompiler() {
   const [compiler, setCompiler] = useState<TypstModule>(undefined)
   const [isLoading, setIsLoading] = useState(true)
@@ -27,9 +29,12 @@ export function useTypstCompiler() {
         if (!typst) {
           throw new Error("Typst module not loaded")
         }
-
-        typst.setCompilerInitOptions({ getModule: getTypstCompilerUrl });
-        typst.setRendererInitOptions({ getModule: getTypstRendererUrl });
+        
+        if (!typstInitialized) {
+          typst.setCompilerInitOptions({ getModule: getTypstCompilerUrl });
+          typst.setRendererInitOptions({ getModule: getTypstRendererUrl });
+          typstInitialized = true
+        }
 
         setCompiler(typst)
         setCompilerInitError(null)
