@@ -1,4 +1,16 @@
 {
     "title": "Справка",
-    "defaultOpen": true
+    "defaultOpen": true,
+    "pages": [
+        "title",
+        "performers",
+        "abstract",
+        "outline",
+        "introduction",
+        "body",
+        "elements",
+        "conclusion",
+        "references",
+        "appendixes"
+    ]
 }

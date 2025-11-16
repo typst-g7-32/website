@@ -34,6 +34,7 @@
     "@myriaddreamin/typst.ts": "^0.7.0-rc1",
     "@types/mdx": "^2.0.13",
     "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-hover-card": "^1.1.15",
     "codemirror": "^6.0.2",
     "codemirror-shiki": "^0.3.0",
     "codemirror-wrapped-line-indent": "^1.0.9",

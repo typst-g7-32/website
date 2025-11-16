@@ -12,13 +12,13 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 import { useCopyButton } from '@/lib/fumadocs/utils/use-copy-button';
-import { buttonVariants } from '@/components/fumadocs/button';
+import { buttonVariants } from '@/components/docs/fumadocs/button';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/components/fumadocs/tabs.unstyled';
+} from '@/components/docs/fumadocs/tabs.unstyled';
 import { mergeRefs } from '@/lib/fumadocs/utils/merge-refs';
 
 
@@ -134,7 +134,7 @@ export function CodeBlock({
       className={cn(
         inTab
           ? 'bg-fd-secondary -mx-px -mb-px last:rounded-b-xl'
-          : 'my-4 bg-fd-card rounded-xl',
+          : 'bg-fd-card rounded-xl',
         keepBackground && 'bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)',
 
 

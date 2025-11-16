@@ -45,7 +45,7 @@
     "src/scripts/compile-typst-examples.js",
     "src/lib/remark-typst-path.js",
     ".next/dev/types/**/*.ts"
-  ],
+, "src/lib/typst/constants.js"  ],
   "exclude": [
     "node_modules"
   ]
