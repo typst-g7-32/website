@@ -1,12 +1,15 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import { useMDXPath } from "@/lib/mdx-path-context"
 import { useTypstCompiler } from "@/hooks/use-typst-compiler"
+
 import { TypstEditor } from "./editor"
 import { TypstOutput } from "./output"
 import { DynamicCodeBlock } from "@/components/docs/fumadocs/dynamic-codeblock"
 import { formatTypstError, parseTypstError } from "@/lib/typst/error-parser"
+import { DEFAULT_HIDDEN_PREFIX, DEFAULT_HIDDEN_SUFFIX } from "@/lib/typst/constants"
+import { LoadingSpinner } from "@/components/ui/spinner"
 
 interface TypstRenderProps {
   code: string
@@ -14,42 +17,18 @@ interface TypstRenderProps {
   layout?: "horizontal" | "vertical"
   wordWrap?: boolean
   editable?: boolean
+  hiddenPrefix?: string | null
+  hiddenSuffix?: string | null
 }
 
-const HIDE_START = "// hide-start"
-const HIDE_END = "// hide-end"
-
-function filterCode(code: string): string {
-  const lines = code.split("\n")
-  const result: string[] = []
-  let hideActive = false
-
-  for (const line of lines) {
-    const trimmed = line.trim()
-
-    if (trimmed.includes(HIDE_START)) {
-      hideActive = true
-      continue
-    }
-
-    if (trimmed.includes(HIDE_END)) {
-      hideActive = false
-      continue
-    }
-
-    if (!hideActive) {
-      result.push(line)
-    }
-  }
-
-  while (result.length > 0 && result[0].trim() === "") {
-    result.shift()
-  }
-  while (result.length > 0 && result[result.length - 1].trim() === "") {
-    result.pop()
-  }
-
-  return result.join("\n")
+function buildFullCode(
+  code: string,
+  hiddenPrefix: string | null | undefined,
+  hiddenSuffix: string | null | undefined
+): string {
+  const prefix = hiddenPrefix || ""
+  const suffix = hiddenSuffix || ""
+  return `${prefix}${code}${suffix}`
 }
 
 export function TypstRender({
@@ -58,10 +37,13 @@ export function TypstRender({
   layout = "horizontal",
   wordWrap = true,
   editable = true,
+  hiddenPrefix = DEFAULT_HIDDEN_PREFIX,
+  hiddenSuffix = DEFAULT_HIDDEN_SUFFIX,
 }: TypstRenderProps) {
   const [imageError, setImageError] = useState(false)
   const [compiledSvg, setCompiledSvg] = useState<string | null>(null)
   const [localCompileError, setLocalCompileError] = useState<string | null>(null)
+  const [initialCompileDone, setInitialCompileDone] = useState(false)
 
   const { docPath } = useMDXPath()
   const {
@@ -71,7 +53,7 @@ export function TypstRender({
     compileError: hookCompileError
   } = useTypstCompiler()
 
-  const displayCode = useMemo(() => filterCode(code), [code])
+  const displayCode = useMemo(() => code.trim(), [code])
 
   const imagePath = useMemo(() => {
     if (image.startsWith("/")) {
@@ -91,7 +73,9 @@ export function TypstRender({
       setLocalCompileError(null)
 
       try {
-        const svg = await compile(codeToCompile)
+        const fullCodeToCompile = buildFullCode(codeToCompile, hiddenPrefix, hiddenSuffix)
+
+        const svg = await compile(fullCodeToCompile)
 
         if (!svg) {
           throw new Error("Compiler returned empty result")
@@ -107,9 +91,8 @@ export function TypstRender({
         }
 
         const processed = trimmedSvg
-        .replace(/width="[^"]*"/g, '')
-        .replace(/height="[^"]*"/g, '')
-      
+          .replace(/width="[^"]*"/g, '')
+          .replace(/height="[^"]*"/g, '')
 
         setCompiledSvg(processed)
         setLocalCompileError(null)
@@ -118,10 +101,18 @@ export function TypstRender({
         const message = formatTypstError(parsedError)
         setLocalCompileError(message)
         console.log("Compilation error:", error)
+      } finally {
+        setInitialCompileDone(true)
       }
     },
-    [compile]
+    [compile, hiddenPrefix, hiddenSuffix]
   )
+
+  useEffect(() => {
+    if (isEditable && typeof compile === 'function' && !initialCompileDone) {
+      compileCode(displayCode)
+    }
+  }, [isEditable, compile, displayCode, compileCode, initialCompileDone])
 
   const handleEditorChange = useCallback(
     (newCode: string) => {
@@ -139,37 +130,46 @@ export function TypstRender({
 
   const displayCompileError = localCompileError || hookCompileError
 
+  const showCompilerLoading = editable && compilerLoading
+
   return (
     <div className="typst-render-container my-6">
-      <div className={containerClass}>
-        <div className={`${codeBlockClass}`}>
-          {isEditable ? (
-            <TypstEditor
-              code={displayCode}
-              onChange={handleEditorChange}
-              wordWrap={wordWrap}
-            />
-          ) : (
-            <DynamicCodeBlock
-              code={displayCode}
-              lang="typst"
-              wordWrap={wordWrap}
-              codeblock={{
-                className: "h-full"
-              }}
-            />
-          )}
+      {showCompilerLoading ? (
+        <div className="flex items-center justify-center p-12 bg-fd-card border rounded-lg">
+          <LoadingSpinner />
+          <span className="ml-3 text-fd-muted-foreground">Загрузка компилятора...</span>
         </div>
+      ) : (
+        <div className={containerClass}>
+          <div className={`${codeBlockClass}`}>
+            {isEditable ? (
+              <TypstEditor
+                code={displayCode}
+                onChange={handleEditorChange}
+                wordWrap={wordWrap}
+              />
+            ) : (
+              <DynamicCodeBlock
+                code={displayCode}
+                lang="typst"
+                wordWrap={wordWrap}
+                codeblock={{
+                  className: "h-full"
+                }}
+              />
+            )}
+          </div>
 
-        <TypstOutput
-          compiledSvg={compiledSvg}
-          imagePath={imagePath}
-          compileError={displayCompileError}
-          imageError={imageError}
-          onImageError={() => setImageError(true)}
-          layout={layout}
-        />
-      </div>
+          <TypstOutput
+            compiledSvg={compiledSvg}
+            imagePath={imagePath}
+            compileError={displayCompileError}
+            imageError={imageError}
+            onImageError={() => setImageError(true)}
+            layout={layout}
+          />
+        </div>
+      )}
     </div>
   )
 }

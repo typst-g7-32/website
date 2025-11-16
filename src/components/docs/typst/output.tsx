@@ -1,6 +1,9 @@
 "use client"
 
 import Image from "next/image"
+import { useState } from "react"
+import { LoadingSpinner } from "@/components/ui/spinner"
+import { cn } from "@/lib/cn"
 
 interface TypstOutputProps {
   compiledSvg: string | null
@@ -19,18 +22,40 @@ export function TypstOutput({
   onImageError,
   layout = "horizontal",
 }: TypstOutputProps) {
+  const [imageLoading, setImageLoading] = useState(true)
+  const [svgLoading, setSvgLoading] = useState(true)
+
   const outputBlockClass =
     layout === "horizontal"
       ? "w-1/2 flex items-center justify-center p-4 bg-gray-200 dark:bg-gray-800 rounded-lg relative overflow-auto"
       : "w-full flex items-center justify-center p-4 bg-gray-200 dark:bg-gray-800 rounded-lg relative overflow-auto"
 
+  const showSpinner = (compiledSvg && svgLoading) || (imagePath && !imageError && imageLoading)
+  const showNoOutput = !compiledSvg && (!imagePath || imageError)
+
   return (
     <div className={outputBlockClass}>
+      {showSpinner && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200/80 dark:bg-gray-800/80 backdrop-blur-sm z-10">
+          <LoadingSpinner />
+        </div>
+      )}
+
       {compiledSvg ? (
         <div
-          className="w-full h-full flex items-center justify-center"
+          className={cn(
+            "w-full h-full flex items-center justify-center transition-opacity duration-200",
+            svgLoading ? "opacity-0" : "opacity-100"
+          )}
           style={{ maxWidth: '800px', maxHeight: '600px' }}
           dangerouslySetInnerHTML={{ __html: compiledSvg }}
+          onLoad={() => setSvgLoading(false)}
+          ref={(el) => {
+            if (el && compiledSvg) {
+              // SVG уже загружен, так как он встроенный
+              setSvgLoading(false)
+            }
+          }}
         />
       ) : imagePath && !imageError ? (
         <Image
@@ -38,11 +63,18 @@ export function TypstOutput({
           alt="Typst rendered output"
           width={800}
           height={600}
-          className="w-full h-auto object mt-0 mb-0"
-          onError={onImageError}
+          className={cn(
+            "w-full h-auto object mt-0 mb-0 transition-opacity duration-200",
+            imageLoading ? "opacity-0" : "opacity-100"
+          )}
+          onError={() => {
+            onImageError()
+            setImageLoading(false)
+          }}
+          onLoad={() => setImageLoading(false)}
           unoptimized
         />
-      ) : (
+      ) : showNoOutput ? (
         <div className="text-fd-muted-foreground text-sm text-center p-4">
           <div>No output</div>
           {imagePath && (
@@ -51,10 +83,10 @@ export function TypstOutput({
             </div>
           )}
         </div>
-      )}
+      ) : null}
 
       {compileError && (
-        <div className="absolute top-4 left-4 right-4 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md shadow-lg">
+        <div className="absolute top-4 left-4 right-4 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md shadow-lg z-20">
           <div className="text-amber-700 dark:text-amber-400 text-sm font-medium mb-1">
             Ошибка компиляции
           </div>

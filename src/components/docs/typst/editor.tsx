@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useLayoutEffect } from "react"
+import { useEffect, useRef, useLayoutEffect, useState } from "react"
 import { EditorView, keymap } from '@codemirror/view'
 import { EditorState, Compartment } from '@codemirror/state'
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
@@ -11,7 +11,8 @@ import { cn } from '@/lib/utils'
 import { Check, Clipboard } from 'lucide-react'
 import { useCopyButton } from '@/lib/fumadocs/utils/use-copy-button'
 import { buttonVariants } from '@/components/docs/fumadocs/button'
-import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
+import { wrappedLineIndent } from 'codemirror-wrapped-line-indent'
+import { LoadingSpinner } from '@/components/ui/spinner'
 
 interface TypstEditorProps {
   code: string
@@ -21,6 +22,7 @@ interface TypstEditorProps {
   icon?: React.ReactNode
   allowCopy?: boolean
   className?: string
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
 const highlighterPromise = createHighlighterCore({
@@ -75,10 +77,12 @@ export function TypstEditor({
   icon,
   allowCopy = true,
   className,
+  onLoadingChange,
 }: TypstEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<EditorView | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const shikiCompartment = useRef(new Compartment())
 
@@ -94,39 +98,51 @@ export function TypstEditor({
     const init = async () => {
       if (!mounted) return
 
-      const themeId = 'github-dark'
+      setIsLoading(true)
+      onLoadingChange?.(true)
 
-      const state = EditorState.create({
-        doc: code ?? '',
-        extensions: [
-          history(),
-          keymap.of(historyKeymap),
-          keymap.of(defaultKeymap),
-          keymap.of([indentWithTab]),
-          wordWrap ? [EditorView.lineWrapping] : [],
-          wordWrap ? wrappedLineIndent : [],
+      try {
+        const themeId = 'github-dark'
 
-          EditorView.updateListener.of((update) => {
-            if (update.docChanged) {
-              const value = update.state.doc.toString()
-              onChangeRef.current(value)
-            }
-          }),
-          EditorView.darkTheme.of(true),
-          shiki({
-            highlighter: highlighterPromise,
-            language: 'typst',
-            theme: themeId,
-          }),
-          shikiCompartment.current.of([]),
-        ],
-      })
+        const state = EditorState.create({
+          doc: code ?? '',
+          extensions: [
+            history(),
+            keymap.of(historyKeymap),
+            keymap.of(defaultKeymap),
+            keymap.of([indentWithTab]),
+            wordWrap ? [EditorView.lineWrapping] : [],
+            wordWrap ? wrappedLineIndent : [],
 
-      if (mounted && editorRef.current && !viewRef.current) {
-        viewRef.current = new EditorView({
-          state,
-          parent: editorRef.current,
+            EditorView.updateListener.of((update) => {
+              if (update.docChanged) {
+                const value = update.state.doc.toString()
+                onChangeRef.current(value)
+              }
+            }),
+            EditorView.darkTheme.of(true),
+            shiki({
+              highlighter: highlighterPromise,
+              language: 'typst',
+              theme: themeId,
+            }),
+            shikiCompartment.current.of([]),
+          ],
         })
+
+        if (mounted && editorRef.current && !viewRef.current) {
+          viewRef.current = new EditorView({
+            state,
+            parent: editorRef.current,
+          })
+        }
+
+        setIsLoading(false)
+        onLoadingChange?.(false)
+      } catch (error) {
+        console.error('Failed to initialize editor:', error)
+        setIsLoading(false)
+        onLoadingChange?.(false)
       }
     }
 
@@ -178,7 +194,7 @@ export function TypstEditor({
       )}
       <div
         className={cn(
-          'text-[13px] py-3.5 overflow-auto max-h-[600px] fd-scroll-container',
+          'text-[13px] py-3.5 overflow-auto max-h-[600px] fd-scroll-container relative',
           !title && 'pr-8',
         )}
         style={
@@ -187,6 +203,11 @@ export function TypstEditor({
           } as object
         }
       >
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-fd-card/80 backdrop-blur-sm z-10">
+            <LoadingSpinner />
+          </div>
+        )}
         <div
           ref={editorRef}
           className="font-mono"
