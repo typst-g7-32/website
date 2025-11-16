@@ -43,7 +43,6 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
                     behavior: 'smooth', 
                     block: 'start' 
                 });
-                // Обновляем hash в URL
                 window.history.pushState(null, '', `#${firstId}`);
             }
         }
@@ -83,13 +82,13 @@ export function QuoteLink({ href, children }: QuoteLinkProps) {
                     collisionBoundary={boundary}
                     collisionPadding={20}
                     avoidCollisions={true}
-                    className="z-50 w-200 rounded-lg border border-border p-4 bg-indigo-900/10 backdrop-filter backdrop-blur-xl shadow-lg animate-in fade-in-0 zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+                    className="z-50 max-w-200 rounded-lg border border-border p-4 bg-indigo-900/10 backdrop-filter backdrop-blur-xl shadow-lg animate-in fade-in-0 zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
                     style={{ backgroundColor: 'color-mix(in srgb, var(--color-fd-background) 45%, transparent)' }}
                 >
                     <div className="space-y-3">
                         {quotes.map((quote, index) => (
                             <div key={index} className={index > 0 ? 'pt-3 border-t border-border/50' : ''}>
-                                <div className="text-sm text-foreground/85 italic leading-relaxed">
+                                <div className="text-sm prose text-foreground/85 italic leading-relaxed">
                                     {quote.children}
                                 </div>
                                 <footer className="text-xs text-muted-foreground flex items-center justify-between pt-2">
