@@ -10,7 +10,7 @@ interface QuoteProps {
   children: React.ReactNode;
 }
 
-const PDF_URL = "/gost-7.32-2017.pdf";
+const PDF_URL = "/documents/gost-7.32-2017.pdf";
 
 export function GostQuote({ children, page, id }: QuoteProps) {
   const { registerQuote } = useQuotes();
