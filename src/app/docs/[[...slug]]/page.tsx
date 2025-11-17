@@ -10,6 +10,8 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { Feedback } from '@/components/docs/fumadocs/feedback';
+import { onRateAction } from '@/lib/actions/feedback';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -23,7 +25,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   return (
     <MDXPathProvider docPath={docPath || 'index'}>
-      <DocsPage toc={page.data.toc} tableOfContent={{style: 'clerk'}} full={page.data.full}>
+      <DocsPage toc={page.data.toc} tableOfContent={{ style: 'clerk' }} full={page.data.full}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>
         <DocsBody>
@@ -33,6 +35,9 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
             })}
           />
         </DocsBody>
+        <Feedback
+          onRateAction={onRateAction}
+        />
       </DocsPage>
     </MDXPathProvider>
   );
