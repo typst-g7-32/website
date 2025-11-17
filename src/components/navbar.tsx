@@ -18,8 +18,8 @@ export function Navbar() {
           </Link>
 
           <div className="ml-8 hidden md:flex items-center space-x-8">
-            <Link href="/docs" className="pointer-events-none text-gray-500 hover:text-white transition-colors" onClick={closeMenu}>
-              Документация (в работе)
+            <Link href="/docs" className="hover:text-white transition-colors" onClick={closeMenu}>
+              Документация
             </Link>
             <Link
               href="/examples"
@@ -77,10 +77,10 @@ export function Navbar() {
           <div className="container mx-auto px-4 py-3 space-y-2">
             <Link
               href="/docs"
-              className="block rounded px-3 py-2 pointer-events-none text-gray-500 hover:text-white hover:bg-white/5 transition"
+              className="block rounded px-3 py-2 hover:text-white hover:bg-white/5 transition"
               onClick={closeMenu}
             >
-              Документация (в работе)
+              Документация
             </Link>
             <Link
               href="/examples"
