@@ -41,3 +41,6 @@ src/lib/quotes-registry.ts
 
 # Fumadocs
 .source/
+
+# Env
+.env
