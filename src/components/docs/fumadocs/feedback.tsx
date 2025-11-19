@@ -16,7 +16,7 @@ const rateButtonVariants = cva(
   {
     variants: {
       active: {
-        true: 'bg-fd-primary text-fd-accent-foreground [&_svg]:fill-current',
+        true: 'text-fd-primary [&_svg]:fill-current',
         false: 'text-fd-muted-foreground',
       },
     },
@@ -138,12 +138,12 @@ export function Feedback({
                 target="_blank"
                 className={cn(
                   buttonVariants({
-                    color: 'primary',
+                    variant: 'outline',
                   }),
                   'text-xs',
                 )}
               >
-                Посмотреть на GitHub
+                Посмотреть в GitHub
               </a>
 
               <button

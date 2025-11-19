@@ -194,7 +194,7 @@ export function TypstEditor({
       )}
       <div
         className={cn(
-          'text-[13px] py-3.5 overflow-auto max-h-[600px] fd-scroll-container relative',
+          'text-[13px] py-3.5 px-2 overflow-auto max-h-[600px] fd-scroll-container relative',
           !title && 'pr-8',
         )}
         style={
