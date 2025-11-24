@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { Suspense } from "react";
+
+import { YandexMetrika } from "@/components/yandex-metrics";
 
 const siteUrl = "https://typst-gost.ru";
 const siteName = "Typst 7.32";
@@ -79,6 +82,10 @@ export default function RootLayout({
         {children}
         <Toaster />
       </body>
+
+      <Suspense fallback={<></>}>
+        <YandexMetrika />
+      </Suspense>
       
       <GoogleAnalytics gaId="G-CF82SLT7VV" />
     </html>
