@@ -30,7 +30,7 @@ export default function HeroSection() {
           <div className="flex justify-center gap-3 sm:gap-4">
             <Button className="w-full sm:w-auto inline-flex justify-center items-center py-3 px-5 text-sm sm:text-base font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-600 focus:ring-1">
               <a
-                href="https://typst.app/app?template=modern-g7-32&version=0.1.0"
+                href="https://typst.app/app?template=modern-g7-32&version=0.2.0"
                 target="_blank"
                 rel="noopener noreferrer"
               >
