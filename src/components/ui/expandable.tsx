@@ -4,9 +4,14 @@ import React, { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+interface CustomChildProps {
+  isScrollable?: boolean
+  showControls?: boolean
+}
+
 interface ExpandableContentBlockProps {
   title: string
-  children: React.ReactNode
+  children: React.ReactElement<CustomChildProps>
   defaultExpanded?: boolean
   icon?: React.ReactNode
 }
@@ -19,7 +24,7 @@ export default function ExpandableContentBlock({
 }: ExpandableContentBlockProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
 
-  const childElement = children as React.ReactElement
+  const childElement = children
   const hasCustomProps = childElement?.type && typeof childElement.type !== 'string'
 
   return (

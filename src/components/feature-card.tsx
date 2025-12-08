@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react"
+import react, { ReactNode } from "react"
 
 export interface FeatureCardProps {
   title?: string
   description?: ReactNode
 }
 
-export default function FeatureCard({ title, description }: FeatureCardProps): JSX.Element {
+export default function FeatureCard({ title, description }: FeatureCardProps): react.ReactElement {
   return (
     <div className="card p-5 sm:p-6 md:p-8 transition-all hover:bg-gray-800/30">
       {title && (

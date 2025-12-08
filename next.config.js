@@ -17,12 +17,23 @@ module.exports = {
             }
         ],
     },
+    turbopack: {},
     webpack: (config) => {
         config.module.rules.push({
             test: /\.svg$/,
             use: ["@svgr/webpack"],
         });
-        config.resolve.alias.canvas = false;
+        if (!isServer) {
+            config.resolve.fallback = {
+                ...config.resolve.fallback,
+                canvas: false,
+            };
+            } else {
+            config.externals.push({
+                canvas: 'canvas',
+            });
+            }
         return config;
     },
+    serverExternalPackages: ['pdfjs-dist'],
 }
