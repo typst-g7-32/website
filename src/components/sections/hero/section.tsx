@@ -1,8 +1,11 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/buttons/button"
+import Link from "next/link"
+import { HeroBackground } from "./background"
 
 export default function HeroSection() {
   return (
-    <section className="pt-24 sm:pt-28 md:pt-32 px-4">
+    <section className="relative pt-24 sm:pt-28 md:pt-40 pb-14 px-4">
+      <HeroBackground />
       <div className="container mx-auto">
         <div className="max-w-5xl mx-auto text-center mb-10 md:mb-14">
           <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs sm:text-sm text-blue-400 mb-5 sm:mb-6">
@@ -27,24 +30,32 @@ export default function HeroSection() {
             </a>
             {" "}шаблон для оформления работ в соответствии с ГОСТ 7.32-2017.<br/>Сосредоточьтесь на содержании, не думайте о форматировании.
           </p>
-          <div className="flex justify-center gap-3 sm:gap-4">
-            <Button className="w-full sm:w-auto inline-flex justify-center items-center py-3 px-5 text-sm sm:text-base font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-600 focus:ring-1">
-              <a
+          <div className="flex justify-center gap-3 sm:gap-4 text-white">
+            <Button
+              variant="primary"
+              className="w-full sm:w-auto text-sm sm:text-base font-medium py-3 px-5"
+              asChild
+            >
+              <Link
                 href="https://typst.app/app?template=modern-g7-32&version=0.2.0"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Начать
-              </a>
+              </Link>
             </Button>
-            <Button className="w-full sm:w-auto py-3 px-5 text-sm sm:text-base font-medium text-white rounded-lg bg-gray-700 hover:bg-gray-600 focus:ring-1">
-              <a
+            <Button 
+              variant="outline"
+              className="w-full sm:w-auto text-sm sm:text-base font-medium py-3 px-5"
+              asChild
+            >
+              <Link
                 href="https://github.com/typst-g7-32/modern-g7-32"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Репозиторий
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

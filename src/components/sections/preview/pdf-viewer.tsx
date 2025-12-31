@@ -5,7 +5,7 @@
   import { toolbarPlugin } from "@react-pdf-viewer/toolbar"
   import { zoomPlugin } from "@react-pdf-viewer/zoom"
   import { ArrowLeft, ArrowRight, Download } from "lucide-react"
-  import { Button } from "@/components/ui/button"
+  import { Button } from "@/components/ui/buttons/button"
   import { LoadingSpinner } from "@/components/ui/spinner"
   import { cn } from "@/lib/utils"
 

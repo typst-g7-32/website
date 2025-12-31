@@ -3,7 +3,7 @@
 import type React from "react"
 import { useRef } from "react"
 import { ExternalLink, FileText, Github, MessageCircle, Link } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/buttons/button"
 import { FeatureCard } from "@/components/feature-card"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { Heading } from "../ui/heading"
@@ -84,17 +84,17 @@ function CTABanner() {
 
       <motion.div className="absolute inset-0 z-0" style={{ x: backgroundX, y: backgroundY }}>
         <motion.div
-          className="absolute -top-1/2 -left-1/4 w-[600px] h-[600px] rounded-full blur-[120px]"
+          className="absolute -top-1/2 -left-1/4 w-150 h-150 rounded-full blur-[120px]"
           style={{ x: blob1X, background: "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)" }}
         />
         <motion.div
-          className="absolute -bottom-1/2 -right-1/4 w-[500px] h-[500px] rounded-full blur-[100px]"
+          className="absolute -bottom-1/2 -right-1/4 w-125 h-125 rounded-full blur-[100px]"
           style={{ x: blob2X, background: "radial-gradient(circle, rgba(168,85,247,0.35) 0%, transparent 70%)" }}
         />
       </motion.div>
 
       <motion.div
-        className="absolute w-[300px] h-[300px] rounded-full blur-[80px] pointer-events-none opacity-0 group-hover/banner:opacity-100 transition-opacity duration-500"
+        className="absolute w-75 h-75 z-0 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover/banner:opacity-100 transition-opacity duration-500"
         style={{ 
             left: mouseXSpring, 
             top: mouseYSpring,
@@ -117,7 +117,7 @@ function CTABanner() {
           <Button
             size="lg"
             variant="outline"
-            className="border-gray-500/10 hover:bg-blue-500/10 bg-white/5 backdrop-blur-sm text-white hover:text-blue-500 hover:border-blue-500/30"
+            className="border-gray-500/10 hover:bg-blue-500/10 bg-gray-900 backdrop-blur-sm text-white hover:text-blue-500 hover:border-blue-500/30"
             asChild
           >
             <a href={LINKS.example} target="_blank" rel="noopener noreferrer">

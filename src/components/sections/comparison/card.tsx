@@ -30,7 +30,7 @@ export function ComparisonCard({ point, index, isVisible }: ComparisonCardProps)
       }}
       className="comparison-card-wrapper h-full"
     >
-      <div className="comparison-card group relative h-full min-h-60 sm:min-h-60 lg:min-h-[340px] flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-slate-800/50 backdrop-blur-md border border-gray-600/50 p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:bg-slate-800/80 hover:border-blue-500/50">
+      <div className="comparison-card group relative h-full min-h-60 sm:min-h-60 lg:min-h-85 flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-slate-800/50 backdrop-blur-md border border-gray-600/50 p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:bg-slate-800/80 hover:border-blue-500/50">
         
         <div className="comparison-card-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
           <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-amber-500/5" />

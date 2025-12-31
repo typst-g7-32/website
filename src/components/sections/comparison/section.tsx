@@ -178,8 +178,8 @@ export function ComparisonSection() {
     <section className="relative py-8 overflow-x-clip">
       <Heading as="h2" title="Сравнение" centered/>
       <div className="absolute inset-0 pointer-events-none">
-        <div className="comparison-gradient-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[800px]" />
-        <div className="comparison-gradient-secondary absolute bottom-[20%] left-[10%] w-[500px] h-[500px]" />
+        <div className="comparison-gradient-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-300 h-200" />
+        <div className="comparison-gradient-secondary absolute bottom-[20%] left-[10%] w-125 h-125" />
       </div>
       <div className="relative">
         <div
@@ -187,7 +187,7 @@ export function ComparisonSection() {
           className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide [-webkit-overflow-scrolling:touch]"
         >
           {comparisons.map((comp, idx) => (
-            <div key={comp.id} className="min-w-full snap-center">
+            <div key={comp.id} className="min-w-full snap-center snap-always">
               <ComparisonSlide data={comp} isActive={activeIndex === idx} />
             </div>
           ))}

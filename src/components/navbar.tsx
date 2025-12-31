@@ -3,8 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { GitHubStars } from "@/components/github-stars"
+import Image from "next/image"
+import { GitHubButton } from "@/components/ui/buttons/github-button"
 import { Heart, Menu, X } from "lucide-react"
+import { Button } from "./ui/buttons/button"
+import { cn } from "@/lib/utils"
 
 const NAV_LINKS = [
   { href: "/docs", label: "Документация (в работе)", disabled: true },
@@ -18,7 +21,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b border-gray-600/20 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-gray-800/10 transition-all duration-300 ${
         isOpen
           ? "bg-gray-950/40 backdrop-blur-2xl backdrop-brightness-50"
           : "bg-gray-950/20 backdrop-blur-md"
@@ -29,8 +32,16 @@ export function Navbar() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity min-w-max"
+            className="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity min-w-max"
           >
+            <Image
+              src="/logo.svg"
+              alt="Typst GOST Logo"
+              width={32}
+              height={32}
+              className="w-7 h-7 md:w-8 md:h-8"
+              priority
+            />
             <span className="text-xl md:text-2xl font-bold text-white tracking-tight">
               Typst 7.32
             </span>
@@ -43,20 +54,12 @@ export function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-4">
           <div className="hidden md:block">
-            <GitHubStars />
+            <GitHubButton />
           </div>
 
-          <Link
-            href="https://pay.cloudtips.ru/p/451a1d97"
-            className="group hidden md:flex items-center gap-2 px-4 py-2 rounded-lg border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 text-sm transition-all duration-200 whitespace-nowrap"
-          >
-            <Heart className="w-4 h-4 text-pink-500 group-hover:text-pink-400 transition-colors group-hover:scale-110" />
-            <span className="text-pink-100/80 group-hover:text-pink-100 font-medium">
-              Пожертвовать
-            </span>
-          </Link>
+          <DonateButton className="hidden md:flex" />
 
           <button
             type="button"
@@ -69,50 +72,88 @@ export function Navbar() {
         </div>
       </nav>
 
-      <div
-        className={`lg:hidden grid transition-[grid-template-rows] duration-300 ease-in-out ${
-          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              {NAV_LINKS.map((link) => (
-                <NavLink
-                  key={link.href}
-                  link={link}
-                  pathname={pathname}
-                  isMobile
-                  onClick={closeMenu}
-                />
-              ))}
-            </div>
+      <MobileMenu isOpen={isOpen} pathname={pathname} closeMenu={closeMenu} />
+    </header>
+  )
+}
 
-            <div className="md:hidden">
-              <div className="h-px bg-white/10 my-4" />
-              
-              <div className="flex flex-col gap-6 px-4">
-                <div className="flex items-center justify-between text-gray-400">
-                  <span className="text-sm">Поддержать проект</span>
-                  <GitHubStars />
-                </div>
-                
-                <Link
-                  href="https://pay.cloudtips.ru/p/451a1d97"
-                  onClick={closeMenu}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg border border-pink-500/30 bg-pink-500/10 text-pink-200 hover:bg-pink-500/20 hover:text-white transition-colors"
-                >
-                  <Heart className="w-4 h-4" />
-                  <span className="font-medium">Пожертвовать</span>
-                </Link>
-              </div>
+function MobileMenu({
+  isOpen,
+  pathname,
+  closeMenu,
+}: {
+  isOpen: boolean
+  pathname: string
+  closeMenu: () => void
+}) {
+  return (
+    <div
+      className={`lg:hidden grid transition-[grid-template-rows] duration-300 ease-in-out ${
+        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+      }`}
+    >
+      <div className="overflow-hidden">
+        <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            {NAV_LINKS.map((link) => (
+              <NavLink
+                key={link.href}
+                link={link}
+                pathname={pathname}
+                isMobile
+                onClick={closeMenu}
+              />
+            ))}
+          </div>
+
+          <div className="md:hidden">
+            <div className="h-px bg-white/10 my-4" />
+            
+            <div className="flex flex-col gap-4 px-4">
+              <GitHubButton />
+              <DonateButton onClick={closeMenu} isMobile />
             </div>
           </div>
         </div>
       </div>
-    </header>
+    </div>
   )
 }
+
+function DonateButton({
+  className = "",
+  onClick,
+  isMobile = false,
+}: {
+  className?: string
+  onClick?: () => void
+  isMobile?: boolean
+}) {
+  return (
+    <Button
+      variant="outline"
+      size="default"
+      className={cn(
+        "border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 text-gray-200 hover:text-pink-100",
+        isMobile && "w-full bg-pink-500/10 hover:bg-pink-500/20 text-pink-200",
+        className
+      )}
+      asChild
+    >
+      <Link
+        href="https://pay.cloudtips.ru/p/451a1d97"
+        onClick={onClick}
+      >
+        <Heart className={cn(
+          "w-4 h-4 text-pink-500 transition-colors",
+          !isMobile && "group-hover:text-pink-400 group-hover:scale-110"
+        )} />
+        Пожертвовать
+      </Link>
+    </Button>
+  )
+}
+
 
 function NavLink({
   link,

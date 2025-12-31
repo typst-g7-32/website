@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react"
 import { Copy, Mail, Send, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/buttons/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"

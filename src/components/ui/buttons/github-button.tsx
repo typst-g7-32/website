@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
+import { Button } from "@/components/ui/buttons/button"
+import Link from "next/link"
 
-export function GitHubStars() {
+export function GitHubButton() {
   const [stars, setStars] = useState<string>("0")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -21,18 +23,22 @@ export function GitHubStars() {
   }, [])
 
   return (
-    <a
-      href="https://github.com/typst-g7-32/modern-g7-32"
-      className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
-      target="_blank"
-      rel="noopener noreferrer"
+    <Button
+      variant="outline"
+      asChild
     >
-      <Star className="h-5 w-5 group-hover:fill-current" />
-      <span className="flex items-center gap-2">
+      <Link
+        href="https://github.com/typst-g7-32/modern-g7-32"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2"
+      >
         GitHub
-        {!isLoading && <span className="text-gray-400">({stars})</span>}
-      </span>
-    </a>
+        <span className="flex items-center gap-0.5">
+          <Star className="h-4 w-4 text-blue-500" />
+          {!isLoading && <span className="text-gray-400">{stars}</span>}
+        </span>
+      </Link>
+    </Button>
   )
 }
-
