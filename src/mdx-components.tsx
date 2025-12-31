@@ -5,6 +5,7 @@ import { ComponentPropsWithoutRef } from 'react';
 import { TypstRender } from './components/docs/typst/renderer';
 import { GostQuote } from './components/docs/quote';
 import { QuoteLink } from './components/docs/quote-link';
+import { FurtherReading } from './components/docs/further-reading';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -12,6 +13,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     TypstRender,
     GostQuote,
     QuoteLink,
+    FurtherReading,
     ...components,
     a: (props: ComponentPropsWithoutRef<'a'>) => {
       if (props.href?.startsWith('#')) {

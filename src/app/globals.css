@@ -6,20 +6,6 @@
   text-wrap: balance;
 }
 
-@media (min-width: 1024px) {
-  #nd-docs-layout {
-    --fd-layout-offset: 20pt !important;
-  }
-
-  #nd-page {
-    --fd-page-width: 95%;
-  }
-  
-  #nd-toc {
-    inset-inline-end: max(var(--fd-layout-offset), calc(50vw - var(--fd-sidebar-width)/2 - var(--fd-page-width)/2)) !important;
-  }
-}
-
 blockquote {
   padding-inline-start: 0 !important
 }
@@ -67,9 +53,11 @@ blockquote {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-secondary: hsl(222, 35%, 22%);
   --color-fd-secondary-foreground: hsl(0, 0%, 95%);
-  --color-fd-accent: hsl(210, 100%, 60%);
+  --color-fd-accent: hsla(210, 85%, 55%, 0.602);
   --color-fd-accent-foreground: hsl(0, 0%, 98%);
   --color-fd-ring: hsl(210, 100%, 65%);
+  --sidebar-border: hsla(220, 30%, 30%, 0.5);
+  --sidebar: hsl(222, 40%, 15%);
 }
 
 @utility text-balance {

@@ -101,6 +101,10 @@ export default function RootLayout({
       
       <body className="antialiased">
         <RootProvider
+          theme={{
+            enabled: false,
+            defaultTheme: 'dark',
+          }}
           i18n={provider("ru")}
         >
         {children}
