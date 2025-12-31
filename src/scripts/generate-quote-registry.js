@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { globSync } from 'glob';
+import glob from 'glob';
+
+const globSync = glob.sync;
 
 console.log('📚 Generating quotes registry...\n');
 

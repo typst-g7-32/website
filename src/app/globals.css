@@ -156,6 +156,7 @@ blockquote {
 }
 
 .card {
+  fill: white;
   background-color: rgba(30, 41, 59, 0.2);
   border: 1px solid rgba(75, 85, 99, 0.3);
   border-style: var(--tw-border-style);
