@@ -2,11 +2,12 @@
 
 import type React from "react"
 import { useRef } from "react"
-import { ExternalLink, FileText, Github, MessageCircle, Star, Link } from "lucide-react"
+import { ExternalLink, FileText, Github, MessageCircle, Link } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FeatureCard } from "@/components/feature-card"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { Heading } from "../ui/heading"
+import { InlineLink } from "../ui/inline-link"
 
 const LINKS = {
   telegram: "https://t.me/typst_gost",
@@ -44,20 +45,6 @@ function StepItem({ step, children }: { step: number; children: React.ReactNode 
       </span>
       <div className="flex-1 text-sm font-medium">{children}</div>
     </div>
-  )
-}
-
-function InlineLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center text-white hover:text-blue-400 transition-colors"
-    >
-      {children}
-      <ExternalLink className="h-4 w-4 ml-1" />
-    </a>
   )
 }
 

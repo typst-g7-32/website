@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { Copy, Mail, Send, ExternalLink, Check } from "lucide-react"
+import { Copy, Mail, Send, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Heading } from "../ui/heading"
+import { InlineLink } from "../ui/inline-link"
 
 export default function ContactSection() {
   const [copied, setCopied] = useState<string | null>(null)
@@ -217,15 +218,7 @@ export default function ContactSection() {
                     <div className="flex-1 min-w-[60%]">
                       <h4 className="text-sm font-medium text-gray-400">{item.label}</h4>
                       {item.link ? (
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white mt-1 hover:text-blue-400 transition-colors flex items-center gap-1 break-all"
-                        >
-                          {item.value}
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
+                        <InlineLink href={item.link}>{item.value}</InlineLink>
                       ) : (
                         <p className="text-white mt-1 break-all">{item.value}</p>
                       )}
