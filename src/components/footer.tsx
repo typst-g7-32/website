@@ -5,16 +5,11 @@ import Image from "next/image"
 import { Button } from "@/components/ui/buttons/button"
 import { DonateButton } from "./ui/buttons/donate-button"
 import { cn } from "@/lib/utils"
-
-const LINKS = {
-  template: "https://typst.app/universe/package/modern-g7-32",
-  repo: "https://github.com/typst-g7-32/modern-g7-32",
-  examples: "https://github.com/typst-g7-32/examples",
-}
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 const footerLinks = [
-  { label: "Документация", href: "/docs", disabled: true },
-  { label: "Примеры", href: LINKS.examples, disabled: true },
+  { label: "Документация", href: NAVIGATION_LINKS.DOCS, disabled: true },
+  { label: "Примеры", href: NAVIGATION_LINKS.GITHUB_EXAMPLES_REPO, disabled: true, external: true },
 ]
 
 export function Footer() {
@@ -48,7 +43,7 @@ export function Footer() {
             className="h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium" 
             asChild
           >
-            <a href={LINKS.template} target="_blank" rel="noopener noreferrer">
+            <a href={NAVIGATION_LINKS.TYPST_UNIVERSE_PACKAGE} target="_blank" rel="noopener noreferrer">
               Начать
             </a>
           </Button>

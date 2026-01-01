@@ -8,15 +8,7 @@ import { FeatureCard } from "@/components/feature-card"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { Heading } from "../ui/heading"
 import { InlineLink } from "../ui/inline-link"
-
-const LINKS = {
-  telegram: "https://t.me/typst_gost",
-  community: "https://t.me/typst_gost",
-  repo: "https://github.com/typst-g7-32/modern-g7-32",
-  template: "https://typst.app/universe/package/modern-g7-32",
-  example: "https://typst.app/project/r5iwSJ49gzKzC8iGMprKI0",
-  examples: "https://github.com/typst-g7-32/examples",
-}
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 function ExternalLinkItem({
   href,
@@ -109,7 +101,7 @@ function CTABanner() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20" asChild>
-            <a href={LINKS.template} target="_blank" rel="noopener noreferrer">
+            <a href={NAVIGATION_LINKS.TYPST_UNIVERSE_PACKAGE} target="_blank" rel="noopener noreferrer">
               <Link className="mr-2 h-5 w-5" />
               Перейти к шаблону
             </a>
@@ -120,7 +112,7 @@ function CTABanner() {
             className="border-gray-500/10 hover:bg-blue-500/10 bg-gray-900 backdrop-blur-sm text-white hover:text-blue-500 hover:border-blue-500/30"
             asChild
           >
-            <a href={LINKS.example} target="_blank" rel="noopener noreferrer">
+            <a href={NAVIGATION_LINKS.TYPST_EXAMPLE_PROJECT} target="_blank" rel="noopener noreferrer">
               <FileText className="mr-2 h-5 w-5" />
               Посмотреть пример
             </a>
@@ -147,10 +139,10 @@ export default function FeaturesSection() {
             description="Документация шаблона в разработке, обратитесь за помощью напрямую"
           >
             <nav className="space-y-3">
-              <ExternalLinkItem href={LINKS.telegram} icon={MessageCircle}>
+              <ExternalLinkItem href={NAVIGATION_LINKS.TELEGRAM_CHAT} icon={MessageCircle}>
                 Telegram поддержка
               </ExternalLinkItem>
-              <ExternalLinkItem href={LINKS.examples} icon={Github}>
+              <ExternalLinkItem href={NAVIGATION_LINKS.GITHUB_EXAMPLES_REPO} icon={Github}>
                 Примеры документов
               </ExternalLinkItem>
             </nav>
@@ -162,11 +154,11 @@ export default function FeaturesSection() {
           >
             <div className="space-y-4">
               <StepItem step={1}>
-                Поставьте звёздочку в <InlineLink href={LINKS.repo}>репозитории</InlineLink>
+                Поставьте звёздочку в <InlineLink href={NAVIGATION_LINKS.GITHUB_REPO}>репозитории</InlineLink>
               </StepItem>
               <StepItem step={2}>Попробуйте шаблон и вернитесь с обратной связью</StepItem>
               <StepItem step={3}>
-                Присоединяйтесь к <InlineLink href={LINKS.community}>сообществу</InlineLink>
+                Присоединяйтесь к <InlineLink href={NAVIGATION_LINKS.TELEGRAM_CHAT}>сообществу</InlineLink>
               </StepItem>
             </div>
           </FeatureCard>

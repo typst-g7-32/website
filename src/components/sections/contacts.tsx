@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Heading } from "../ui/heading"
 import { InlineLink } from "../ui/inline-link"
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 export default function ContactSection() {
   const [copied, setCopied] = useState<string | null>(null)
@@ -25,14 +26,14 @@ export default function ContactSection() {
       label: "Телеграм беседа",
       value: "t.me/typst_gost",
       copyValue: "https://t.me/typst_gost",
-      link: "https://t.me/typst_gost",
+      link: NAVIGATION_LINKS.TELEGRAM_CHAT,
     },
     {
       icon: <Send className="h-5 w-5" />,
       label: "Телеграм",
       value: "t.me/ne4genet",
       copyValue: "t.me/ne4genet",
-      link: "https://t.me/ne4genet",
+      link: NAVIGATION_LINKS.TELEGRAM_USER,
     },
     {
       icon: <Mail className="h-5 w-5" />,
@@ -264,3 +265,4 @@ export default function ContactSection() {
     </section>
   )
 }
+

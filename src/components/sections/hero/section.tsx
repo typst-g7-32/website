@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/buttons/button"
 import Link from "next/link"
 import { HeroBackground } from "./background"
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 export default function HeroSection() {
   return (
@@ -21,7 +22,7 @@ export default function HeroSection() {
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-5 px-2 sm:px-0">
             Автоматизированный{" "}
             <a
-              href="https://typst.app"
+              href={NAVIGATION_LINKS.TYPST_APP}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/30 hover:decoration-blue-300/50 underline-offset-2 transition-colors"
@@ -37,7 +38,7 @@ export default function HeroSection() {
               asChild
             >
               <Link
-                href="https://typst.app/app?template=modern-g7-32&version=0.2.0"
+                href={NAVIGATION_LINKS.TYPST_TEMPLATE_START}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -50,7 +51,7 @@ export default function HeroSection() {
               asChild
             >
               <Link
-                href="https://github.com/typst-g7-32/modern-g7-32"
+                href={NAVIGATION_LINKS.GITHUB_REPO}
                 target="_blank"
                 rel="noopener noreferrer"
               >

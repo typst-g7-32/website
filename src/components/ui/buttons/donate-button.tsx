@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "./button"
 import { Heart } from "lucide-react"
 import Link from "next/link"
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 export function DonateButton({
   className = "",
@@ -24,7 +25,7 @@ export function DonateButton({
       asChild
     >
       <Link
-        href="https://pay.cloudtips.ru/p/451a1d97"
+        href={NAVIGATION_LINKS.DONATE}
         onClick={onClick}
       >
         <Heart className={cn(

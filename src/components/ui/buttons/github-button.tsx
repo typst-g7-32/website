@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
 import { Button } from "@/components/ui/buttons/button"
 import Link from "next/link"
+import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 export function GitHubButton() {
   const [stars, setStars] = useState<string>("0")
@@ -28,7 +29,7 @@ export function GitHubButton() {
       asChild
     >
       <Link
-        href="https://github.com/typst-g7-32/modern-g7-32"
+        href={NAVIGATION_LINKS.GITHUB_REPO}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2"

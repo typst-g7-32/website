@@ -8,9 +8,11 @@ import { GitHubButton } from "@/components/ui/buttons/github-button"
 import { DonateButton } from "@/components/ui/buttons/donate-button"
 import { Menu, X } from "lucide-react"
 
+import { NAVIGATION_LINKS } from "@/lib/navigation"
+
 const NAV_LINKS = [
-  { href: "/docs", label: "Документация (в работе)", disabled: true },
-  { href: "/examples", label: "Примеры (в работе)", disabled: true },
+  { href: NAVIGATION_LINKS.DOCS, label: "Документация (в работе)", disabled: true },
+  { href: NAVIGATION_LINKS.EXAMPLES_INTERNAL, label: "Примеры (в работе)", disabled: true },
 ]
 
 export function Navbar() {
