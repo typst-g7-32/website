@@ -53,7 +53,7 @@ export default function PreviewSection() {
         <div className="relative mx-auto max-w-7xl">
           <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 to-purple-500/10 rounded-3xl blur-3xl" />
           <div className="relative bg-gray-800/50 border border-gray-800/50 rounded-3xl p-4 sm:p-6 backdrop-blur-xs">
-            <div className="hidden xl:flex gap-6 items-stretch">
+            <div className="hidden lg:flex gap-6 items-stretch">
               <div className="w-1/2 h-[70vh] min-h-120">
                 {loading ? (
                   <div className="flex h-full items-center justify-center">
@@ -73,7 +73,7 @@ export default function PreviewSection() {
               </div>
             </div>
 
-            <div className="xl:hidden space-y-4">
+            <div className="lg:hidden space-y-4">
               <ExpandableContentBlock title="Код" icon={<Code size={16} />}>
                 {loading ? (
                   <div className="flex h-full items-center justify-center">
@@ -87,7 +87,7 @@ export default function PreviewSection() {
               </ExpandableContentBlock>
 
               <ExpandableContentBlock title="Документ" icon={<FileText size={16} />}>
-                <div className="w-full">
+                <div className="w-full h-[70vh]">
                   <PdfViewer pdfUrl="https://raw.githubusercontent.com/typst-g7-32/examples/refs/heads/preview/preview/preview/preview.pdf" />
                 </div>
               </ExpandableContentBlock>

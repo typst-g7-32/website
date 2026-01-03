@@ -21,6 +21,8 @@ export function Navbar() {
   const pathname = usePathname()
   const closeMenu = () => setIsOpen(false)
 
+  const isProduction = process.env.NODE_ENV === 'production'
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 border-b border-gray-800/10 transition-all duration-300 ${
@@ -74,7 +76,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      <Garland />
+      {isProduction && <Garland />}
 
       <MobileMenu isOpen={isOpen} pathname={pathname} closeMenu={closeMenu} />
     </header>

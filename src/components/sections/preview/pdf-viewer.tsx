@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef, useEffect, useMemo } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { Document, Page, pdfjs } from "react-pdf"
 import { ArrowLeft, ArrowRight, Download } from "lucide-react"
 import { Button } from "@/components/ui/buttons/button"
@@ -17,6 +17,8 @@ interface PdfViewerProps {
   showControls?: boolean
 }
 
+const PAGE_BUFFER = 2
+
 export default function PdfViewer({
   pdfUrl,
   showControls = true
@@ -29,7 +31,9 @@ export default function PdfViewer({
   const containerRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map())
+  
   const isProgrammaticScroll = useRef(false)
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
@@ -45,7 +49,7 @@ export default function PdfViewer({
         const width = entry.contentRect.width
         setContainerWidth(prev => {
           if (!prev || Math.abs(prev - width) > 15) {
-            return width - 32
+            return width
           }
           return prev
         })
@@ -53,10 +57,7 @@ export default function PdfViewer({
     })
 
     resizeObserver.observe(container)
-
-    return () => {
-      resizeObserver.disconnect()
-    }
+    return () => resizeObserver.disconnect()
   }, [])
 
   useEffect(() => {
@@ -64,17 +65,18 @@ export default function PdfViewer({
 
     const options = {
       root: containerRef.current,
-      rootMargin: '-45% 0px -45% 0px',
-      threshold: 0.01
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
     }
 
     observerRef.current = new IntersectionObserver((entries) => {
       if (isProgrammaticScroll.current) return
 
-      const visibleEntry = entries.find(entry => entry.isIntersecting)
+      const visibleEntries = entries.filter(entry => entry.isIntersecting)
       
-      if (visibleEntry) {
-        const pageNum = Number(visibleEntry.target.getAttribute('data-page-number'))
+      if (visibleEntries.length > 0) {
+        const entry = visibleEntries[0]
+        const pageNum = Number(entry.target.getAttribute('data-page-number'))
         if (!isNaN(pageNum)) {
           setPageNumber(pageNum)
         }
@@ -88,34 +90,64 @@ export default function PdfViewer({
     return () => {
       observerRef.current?.disconnect()
     }
-  }, [isLoading, numPages])
+  }, [isLoading, numPages, pageNumber])
+
+  const handleScroll = () => {
+    if (isProgrammaticScroll.current || !containerRef.current || !numPages) return
+
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current
+    const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 5
+    
+    if (isAtBottom && pageNumber !== numPages) {
+      setPageNumber(numPages)
+    }
+  }
 
   const scrollToPage = (targetPage: number) => {
     const element = pageRefs.current.get(targetPage)
+    const container = containerRef.current
 
-    if (element) {
+    if (element && container) {
       isProgrammaticScroll.current = true
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+
       setPageNumber(targetPage)
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+
+      const containerRect = container.getBoundingClientRect()
+      const elementRect = element.getBoundingClientRect()
+      const relativeTop = elementRect.top - containerRect.top + container.scrollTop
+      
+      const targetScrollTop = relativeTop - 16
+
+      container.scrollTo({
+        top: targetScrollTop,
+        behavior: 'smooth'
       })
 
-      setTimeout(() => {
+      scrollTimeoutRef.current = setTimeout(() => {
         isProgrammaticScroll.current = false
+        handleScroll()
       }, 800)
+    } else {
+      setPageNumber(targetPage)
     }
   }
 
   const goToPreviousPage = () => scrollToPage(Math.max(pageNumber - 1, 1))
   const goToNextPage = () => scrollToPage(Math.min(pageNumber + 1, numPages || 1))
 
+  const shouldRenderPage = (index: number) => {
+    const pageIndex = index + 1
+    return pageIndex >= pageNumber - PAGE_BUFFER && pageIndex <= pageNumber + PAGE_BUFFER
+  }
+
   return (
-    <div className="group relative w-full h-dvh md:h-full rounded-none md:rounded-2xl border-0 md:border border-gray-700/30 bg-gray-50 flex flex-col overflow-hidden">
+    <div className="group relative w-full h-full bg-gray-50 flex flex-col overflow-hidden">
       
       <div 
         ref={containerRef}
-        className="flex-1 w-full overflow-y-auto overflow-x-hidden custom-scrollbar p-4 scroll-smooth overscroll-y-contain"
+        onScroll={handleScroll}
+        className="flex-1 w-full overflow-y-auto overflow-x-hidden custom-scrollbar px-2 md:px-10 scroll-smooth overscroll-y-contain relative"
       >
         <Document
           file={pdfUrl}
@@ -130,41 +162,59 @@ export default function PdfViewer({
               Не удалось загрузить документ
             </div>
           }
-          className="flex flex-col items-center gap-4 pb-24"
+          className="flex flex-col items-center gap-4"
         >
           {numPages && Array.from(new Array(numPages), (_, index) => {
             const pageIndex = index + 1
+            const isRendered = shouldRenderPage(index)
             
             return (
               <div
-                key={`page_${pageIndex}`}
+                key={`page-wrapper-${pageIndex}`}
                 data-page-number={pageIndex}
                 ref={(el) => {
-                  if (el) pageRefs.current.set(pageIndex, el)
-                  else pageRefs.current.delete(pageIndex)
+                  if (el) {
+                    pageRefs.current.set(pageIndex, el)
+                    observerRef.current?.observe(el)
+                  } else {
+                    pageRefs.current.delete(pageIndex)
+                  }
                 }}
-                className="shadow-md rounded-sm overflow-hidden bg-white"
+                className="shadow-md rounded-sm bg-white transition-opacity duration-300"
                 style={{
                   width: containerWidth || '100%',
-                  minHeight: containerWidth ? containerWidth * 1.4 : '300px'
+                  minHeight: containerWidth ? containerWidth * 1.414 : '300px', 
+                  opacity: isRendered ? 1 : 0.5 
                 }}
               >
-                <Page 
-                  pageNumber={pageIndex} 
-                  width={containerWidth || undefined} 
-                  loading={
-                    <div 
-                      className="bg-gray-100 animate-pulse" 
-                      style={{ 
-                        width: '100%',
-                        aspectRatio: '1 / 1.414'
-                      }} 
-                    />
-                  }
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                  error={<div className="p-4 text-xs text-red-400">Ошибка страницы</div>}
-                />
+                {isRendered ? (
+                  <Page 
+                    pageNumber={pageIndex} 
+                    width={containerWidth || undefined} 
+                    loading={
+                      <div 
+                        className="bg-gray-100 animate-pulse" 
+                        style={{ 
+                          width: '100%',
+                          aspectRatio: '1 / 1.414'
+                        }} 
+                      />
+                    }
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                    error={<div className="p-4 text-xs text-red-400">Ошибка страницы</div>}
+                  />
+                ) : (
+                  <div 
+                    className="flex items-center justify-center text-gray-300 text-sm font-medium"
+                    style={{ 
+                      width: '100%', 
+                      height: containerWidth ? containerWidth * 1.414 : '300px' 
+                    }}
+                  >
+                    Страница {pageIndex}
+                  </div>
+                )}
               </div>
             )
           })}
@@ -172,7 +222,7 @@ export default function PdfViewer({
       </div>
 
       {!isLoading && showControls && (
-        <div className="pointer-events-none absolute inset-0 z-50 flex flex-col justify-between p-4 pb-8 md:pb-4">
+        <div className="pointer-events-none absolute inset-0 z-50 flex flex-col justify-between p-4">
           
           <div className="flex justify-end pointer-events-auto">
             <Link href={pdfUrl} target="_blank">
@@ -186,7 +236,7 @@ export default function PdfViewer({
             </Link>
           </div>
 
-          <div className="flex justify-center w-full pointer-events-auto">
+          <div className="hidden md:flex justify-center w-full pointer-events-auto">
             <div className="flex items-center gap-3 rounded-full bg-gray-900/90 px-4 py-2 shadow-xl backdrop-blur-md border border-white/10">
               <Button
                 variant="ghost"

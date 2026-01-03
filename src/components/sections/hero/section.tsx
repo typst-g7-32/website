@@ -5,7 +5,7 @@ import { NAVIGATION_LINKS } from "@/lib/navigation"
 
 export default function HeroSection() {
   return (
-    <section className="relative pt-24 sm:pt-28 md:pt-40 pb-14 px-4">
+    <section className="relative pt-24 sm:pt-28 md:pt-40 md:pb-14 px-4">
       <HeroBackground />
       <div className="container mx-auto">
         <div className="max-w-5xl mx-auto text-center mb-10 md:mb-14">
