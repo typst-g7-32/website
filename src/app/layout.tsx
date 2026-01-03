@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Providers } from '@/app/providers';
+import { Suspense } from "react";
+
+import { YandexMetrika } from "@/components/yandex-metrics";
 
 import "./globals.css";
 import '../components/sections/comparison/styles.css'
@@ -27,14 +29,14 @@ export const metadata: Metadata = {
       }
     ],
   },
-
+  
   twitter: {
     card: "summary_large_image",
     title: "Typst 7.32 — Шаблон для ГОСТ 7.32-2017",
     description: "Шаблон для автоматического оформления документов по ГОСТ 7.32-2017",
     images: [`${siteUrl}/og-image.png`],
   },
-
+  
   robots: "index, follow",
 };
 
@@ -48,7 +50,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href={siteUrl} />
-
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -75,12 +77,14 @@ export default function RootLayout({
           }}
         />
       </head>
-
+      
       <body className="antialiased">
-        <Providers>
-          {children}
-        </Providers>
+        {children}
       </body>
+
+      <Suspense fallback={<></>}>
+        <YandexMetrika />
+      </Suspense>
     </html>
   );
 }
