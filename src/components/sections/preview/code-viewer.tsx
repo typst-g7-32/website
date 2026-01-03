@@ -1,9 +1,8 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
-import { Copy } from 'lucide-react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Copy, Check, X, Loader2 } from 'lucide-react';
 import Prism from 'prismjs';
-import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
 import '../../../lib/prism/prism-typst';
@@ -24,30 +23,38 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   showControls = true
 }) => {
   const codeRef = useRef<HTMLPreElement>(null);
-  const { toast } = useToast()
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleCopyClick = async () => {
+  const handleCopyClick = useCallback(async () => {
+    setCopyStatus('loading');
     try {
       await navigator.clipboard.writeText(codeContent);
-      toast({
-        title: "Код скопирован!",
-        description: "Код успешно скопирован в буфер обмена.",
-      })
+      setCopyStatus('success');
     } catch (err) {
       console.error("Failed to copy text: ", err);
-      toast({
-        variant: "destructive",
-        title: "Ошибка",
-        description: "Не удалось скопировать код.",
-      })
+      setCopyStatus('error');
     }
-  };
+  }, [codeContent]);
+
+  useEffect(() => {
+    if (copyStatus !== 'idle') {
+      const timer = setTimeout(() => setCopyStatus('idle'), copyStatus === 'success' ? 1000 : 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copyStatus]);
 
   useEffect(() => {
     if (codeRef.current) {
       Prism.highlightElement(codeRef.current);
     }
   }, [codeContent, codeType]);
+
+  const icon = {
+    idle: <Copy className="h-4 w-4" />,
+    loading: <Loader2 className="h-4 w-4 animate-spin" />,
+    success: <Check className="h-4 w-4" />,
+    error: <X className="h-4 w-4" />
+  }[copyStatus];
 
   return (
     <div className="flex flex-col h-full bg-gray-800 rounded-lg shadow-md">
@@ -58,10 +65,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         {showControls && (
           <button
             onClick={handleCopyClick}
-            className="text-gray-400 hover:text-white focus:outline-hidden"
-            aria-label="Copy code"
+            disabled={copyStatus === 'loading'}
+            className={cn(
+              "p-1 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500",
+              copyStatus === 'success' && "text-green-400 bg-green-500/20",
+              copyStatus === 'error' && "text-red-400 bg-red-500/20",
+              copyStatus === 'loading' && "text-blue-400"
+            )}
+            aria-label={copyStatus === 'success' ? 'Copied!' : copyStatus === 'error' ? 'Copy failed' : 'Copy code'}
           >
-            <Copy className="h-4 w-4" />
+            {icon}
           </button>
         )}
       </div>

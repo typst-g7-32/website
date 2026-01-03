@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/toaster"
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { Suspense } from "react";
-
-import { YandexMetrika } from "@/components/yandex-metrics";
+import { Providers } from '@/app/providers';
 
 import "./globals.css";
 import '../components/sections/comparison/styles.css'
@@ -31,14 +27,14 @@ export const metadata: Metadata = {
       }
     ],
   },
-  
+
   twitter: {
     card: "summary_large_image",
     title: "Typst 7.32 — Шаблон для ГОСТ 7.32-2017",
     description: "Шаблон для автоматического оформления документов по ГОСТ 7.32-2017",
     images: [`${siteUrl}/og-image.png`],
   },
-  
+
   robots: "index, follow",
 };
 
@@ -52,7 +48,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href={siteUrl} />
-        
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -79,17 +75,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      
-      <body className="antialiased">
-        {children}
-        <Toaster />
-      </body>
 
-      <Suspense fallback={<></>}>
-        <YandexMetrika />
-      </Suspense>
-      
-      <GoogleAnalytics gaId="G-CF82SLT7VV" />
+      <body className="antialiased">
+        <Providers>
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }
