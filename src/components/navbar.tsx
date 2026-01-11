@@ -12,7 +12,7 @@ import { NAVIGATION_LINKS } from "@/lib/navigation"
 import { Garland } from "./decoration/winter/garland"
 
 const NAV_LINKS = [
-  { href: NAVIGATION_LINKS.DOCS, label: "Документация (в работе)", disabled: true },
+  { href: NAVIGATION_LINKS.DOCS, label: "Документация", disabled: false },
   { href: NAVIGATION_LINKS.EXAMPLES_INTERNAL, label: "Примеры (в работе)", disabled: true },
 ]
 
