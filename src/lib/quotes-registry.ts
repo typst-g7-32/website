@@ -1,5 +1,5 @@
 // Auto-generated file. Do not edit manually.
-// Generated at: 2025-12-31T17:46:44.170Z
+// Generated at: 2026-01-11T14:07:24.261Z
 
 export interface QuoteMetadata {
   id: string;
